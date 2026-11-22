@@ -4,13 +4,15 @@ import RutaProtegida from './components/RutaProtegida.jsx';
 import Login from './pages/Login.jsx';
 import Inicio from './pages/Inicio.jsx';
 import GoreInicio from './modulos/gore/Inicio.jsx';
-import LogisticaInicio from './modulos/logistica/Inicio.jsx';
+import RegistroCarga from './modulos/logistica/RegistroCarga.jsx';
+import ConsultaCarga from './modulos/logistica/ConsultaCarga.jsx';
+import ActualizarCarga from './modulos/logistica/ActualizarCarga.jsx';
+import PanelLogistica from './modulos/logistica/PanelLogistica.jsx';
 import RegistroCita from './modulos/migraciones/RegistroCita.jsx';
 import ConsultaCita from './modulos/migraciones/ConsultaCita.jsx';
 import ActualizarCita from './modulos/migraciones/ActualizarCita.jsx';
 import PanelAdmin from './modulos/migraciones/PanelAdmin.jsx';
 
-// Marco con menú para todas las páginas internas
 function Marco() {
   return (
     <RutaProtegida>
@@ -28,7 +30,15 @@ export default function App() {
       <Route element={<Marco />}>
         <Route path="/" element={<Inicio />} />
         <Route path="/gore" element={<P modulo="gore"><GoreInicio /></P>} />
-        <Route path="/logistica" element={<P modulo="logistica"><LogisticaInicio /></P>} />
+
+        {/* Rutas protegidas de LogísticaMax Perú */}
+        <Route path="/logistica" element={<Navigate to="/logistica/consulta" replace />} />
+        <Route path="/logistica/registro" element={<P modulo="logistica"><RegistroCarga /></P>} />
+        <Route path="/logistica/consulta" element={<P modulo="logistica"><ConsultaCarga /></P>} />
+        <Route path="/logistica/actualizar/:id" element={<P modulo="logistica"><ActualizarCarga /></P>} />
+        <Route path="/logistica/panel" element={<P modulo="logistica" roles={['administrador', 'empleado']}><PanelLogistica /></P>} />
+
+        {/* Rutas protegidas de Migraciones Perú */}
         <Route path="/migraciones/registro" element={<P modulo="migraciones"><RegistroCita /></P>} />
         <Route path="/migraciones/consulta" element={<P modulo="migraciones"><ConsultaCita /></P>} />
         <Route path="/migraciones/actualizar/:id" element={<P modulo="migraciones"><ActualizarCita /></P>} />
