@@ -11,6 +11,91 @@ const pool = new Pool({
     : false,
 });
 
+async function seedTramitesPorModulo() {
+  // Obtiene usuarios de prueba (cliente1..cliente30) o todos si no coinciden
+  let { rows: usuarios } = await pool.query(
+    `SELECT id, nombre FROM usuarios WHERE email LIKE 'cliente%@correo.pe' ORDER BY id ASC`
+  );
+  if (usuarios.length === 0) {
+    const fallback = await pool.query(`SELECT id, nombre FROM usuarios ORDER BY id ASC`);
+    usuarios = fallback.rows;
+  }
+  if (usuarios.length === 0) {
+    throw new Error('No hay usuarios disponibles para asignar los trámites.');
+  }
+
+  const getUsuario = (idx) => usuarios[idx % usuarios.length];
+
+  // 1. Módulo Migraciones: 30 registros en citas_migraciones
+  const { rows: migCount } = await pool.query(
+    `SELECT COUNT(*)::int AS total FROM citas_migraciones`
+  );
+  if (migCount[0].total < 30) {
+    const faltanMig = 30 - migCount[0].total;
+    for (let i = 1; i <= faltanMig; i++) {
+      const nro = migCount[0].total + i;
+      const usr = getUsuario(nro - 1);
+      await pool.query(
+        `INSERT INTO citas_migraciones (id_usuario, tramite, fecha, hora, estado)
+         VALUES ($1, $2::varchar, CURRENT_DATE + $3::int, '09:00'::time, 'registrado'::varchar)`,
+        [
+          usr.id,
+          `Trámite Migración #${nro}`,
+          nro,
+        ]
+      );
+    }
+  }
+
+  // 2. Módulo LogísticaMax: 30 registros en cotizaciones_carga (incluye id_usuario del nuevo schema)
+  const { rows: logCount } = await pool.query(
+    `SELECT COUNT(*)::int AS total FROM cotizaciones_carga`
+  );
+  if (logCount[0].total < 30) {
+    const faltanLog = 30 - logCount[0].total;
+    for (let i = 1; i <= faltanLog; i++) {
+      const nro = logCount[0].total + i;
+      const usr = getUsuario(nro + 9);
+      await pool.query(
+        `INSERT INTO cotizaciones_carga (id_usuario, cliente, ruta, carga, toneladas, matpel, monto_calculado, estado)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          usr.id,
+          usr.nombre,
+          `Ruta Huancayo - Lima #${nro}`,
+          `Carga general #${nro}`,
+          1.00,
+          false,
+          450.00,
+          'registrado',
+        ]
+      );
+    }
+  }
+
+  // 3. Módulo GORE Junín: 30 registros en tramites_mesa_partes
+  const { rows: goreCount } = await pool.query(
+    `SELECT COUNT(*)::int AS total FROM tramites_mesa_partes`
+  );
+  if (goreCount[0].total < 30) {
+    const faltanGore = 30 - goreCount[0].total;
+    for (let i = 1; i <= faltanGore; i++) {
+      const nro = goreCount[0].total + i;
+      const usr = getUsuario(nro + 19);
+      await pool.query(
+        `INSERT INTO tramites_mesa_partes (id_usuario, asunto, documento, estado)
+         VALUES ($1, $2, $3, $4)`,
+        [
+          usr.id,
+          `Asunto Mesa de Partes #${nro}`,
+          `DOC-2026-${String(nro).padStart(3, '0')}`,
+          'registrado',
+        ]
+      );
+    }
+  }
+}
+
 async function init() {
   try {
     const hash = await bcrypt.hash('123456', 10);
@@ -79,7 +164,10 @@ async function init() {
       );
     }
 
-    console.log('Tablas listas y usuarios de prueba creados (contraseña 123456)');
+    // 30 registros por cada módulo (90 en total) respetando mínimos y sin duplicar al reejecutar
+    await seedTramitesPorModulo();
+
+    console.log('Tablas listas, usuarios de prueba creados (contraseña 123456) y 30 trámites por módulo asegurados');
   } catch (err) {
     console.error('Error en init.js:', err);
   } finally {
