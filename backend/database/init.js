@@ -30,5 +30,27 @@ for (const [nombre, email, roles] of USUARIOS) {
     );
   }
 }
+// 10 clientes de prueba con rol cliente en los 3 módulos
+for (let i = 1; i <= 10; i++) {
+  const { rows } = await pool.query(
+    `INSERT INTO usuarios (nombre, email, password_hash) VALUES ($1,$2,$3)
+     ON CONFLICT (email) DO UPDATE SET nombre = EXCLUDED.nombre RETURNING id`,
+    [`Cliente ${i}`, `cliente${i}@correo.pe`, hash]
+  );
+  for (const m of ['logistica', 'gore', 'migraciones'])
+    await pool.query(
+      `INSERT INTO usuario_rol (id_usuario, modulo, rol) VALUES ($1,$2,'cliente')
+       ON CONFLICT (id_usuario, modulo) DO NOTHING`,
+      [rows[0].id, m]
+    );
+}
+
+// 3 citas por cliente (solo si la tabla está vacía)
+const { rows: n } = await pool.query('SELECT COUNT(*)::int AS total FROM citas_migraciones');
+if (n[0].total === 0)
+  await pool.query(`INSERT INTO citas_migraciones (id_usuario, tramite, fecha, hora, estado)
+    SELECT u.id, 'Pasaporte'::varchar, CURRENT_DATE + g, '08:00'::time, 'registrado'::varchar
+    FROM usuarios u, generate_series(1,3) g WHERE u.email LIKE 'cliente%@correo.pe'`);
+    
 console.log('Tablas listas y usuarios de prueba creados (contraseña 123456)');
 await pool.end();
