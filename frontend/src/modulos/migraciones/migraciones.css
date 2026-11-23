@@ -1,0 +1,431 @@
+/* =========================================================
+   MÓDULO MIGRACIONES · ESTILO INSTITUCIONAL PERÚ
+   ========================================================= */
+
+@keyframes migEntradaElegante {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes migVueloAvion {
+  0% {
+    left: -8%;
+    top: 70%;
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.88);
+  }
+  12% {
+    opacity: 0.92;
+  }
+  50% {
+    top: 24%;
+    transform: rotate(-4deg) scale(1.04);
+  }
+  88% {
+    opacity: 0.92;
+  }
+  100% {
+    left: 108%;
+    top: 15%;
+    opacity: 0;
+    transform: rotate(-8deg) scale(0.95);
+  }
+}
+
+/* Contenedor principal con superficie cálida refinada */
+.mig-modulo-wrapper {
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at top right, rgba(185, 28, 28, 0.08), transparent 42%),
+    linear-gradient(180deg, #faf6f6 0%, #f4ecec 100%);
+  border: 1px solid #ead4d4;
+  box-shadow: 0 10px 28px rgba(40, 10, 14, 0.06);
+  animation: migEntradaElegante 0.4s ease-out both;
+}
+
+/* Mensajes de estado */
+.mig-modulo-wrapper .error {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  border-left: 4px solid #dc2626;
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  font-weight: 600;
+}
+
+.mig-modulo-wrapper .exito {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  border-left: 4px solid #059669;
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  font-weight: 600;
+}
+
+/* Banner superior limpio y con presencia */
+.mig-hero-banner {
+  position: relative;
+  min-height: 185px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: #4a0b12;
+  box-shadow: 0 14px 30px rgba(74, 11, 18, 0.2);
+  display: flex;
+  align-items: stretch;
+  animation: migEntradaElegante 0.42s ease-out both;
+}
+
+.mig-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(0.42) contrast(1.06);
+  transition: transform 0.6s ease;
+}
+
+.mig-hero-banner:hover .mig-hero-img {
+  transform: scale(1.03);
+}
+
+.mig-hero-overlay {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 1.4rem 1.65rem;
+  background: linear-gradient(
+    90deg,
+    rgba(74, 11, 18, 0.92) 0%,
+    rgba(127, 16, 25, 0.82) 55%,
+    rgba(74, 11, 18, 0.68) 100%
+  );
+  display: flex;
+  align-items: center;
+}
+
+.mig-hero-overlay > .d-flex {
+  width: 100%;
+}
+
+.mig-titulo-banner {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mig-titulo-banner::after {
+  display: none;
+}
+
+.mig-hero-badge-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  max-width: 260px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.mig-hero-badge-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mig-mini-thumb {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #fbbf24;
+  flex-shrink: 0;
+}
+
+/* Avión animado con estela */
+.mig-avion-ruta {
+  position: absolute;
+  left: -8%;
+  top: 50%;
+  z-index: 3;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #fbbf24;
+  font-size: 1.45rem;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+  animation: migVueloAvion 9.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+.mig-avion-ruta::after {
+  content: "";
+  width: 68px;
+  height: 2px;
+  order: -1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(251, 191, 36, 0.15) 40%,
+    rgba(255, 255, 255, 0.65) 100%
+  );
+  border-radius: 999px;
+}
+
+/* Tarjetas, formularios, métricas y tablas */
+.mig-card-panel,
+.mig-side-card,
+.mig-table-card,
+.mig-stat-card,
+.mig-empty-card,
+.mig-form-box {
+  background: #fffdfd;
+  border: 1px solid #ead8d8;
+  border-radius: 15px;
+  box-shadow: 0 8px 22px rgba(40, 10, 14, 0.05);
+  animation: migEntradaElegante 0.45s ease-out both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.mig-stat-card {
+  border-left: 4px solid #991b1b;
+}
+
+.mig-card-panel,
+.mig-table-card,
+.mig-form-box {
+  border-top: 3px solid #991b1b;
+}
+
+.mig-stat-card:hover,
+.mig-side-card:hover {
+  transform: translateY(-3px);
+  border-color: #d49a9a;
+  box-shadow: 0 14px 28px rgba(74, 11, 18, 0.1);
+}
+
+/* Tarjeta lateral con imagen */
+.mig-side-img-wrap {
+  position: relative;
+  height: 175px;
+  overflow: hidden;
+  border-bottom: 3px solid #991b1b;
+}
+
+.mig-side-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mig-side-card:hover .mig-side-img {
+  transform: scale(1.04);
+}
+
+.mig-side-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  background: rgba(110, 15, 24, 0.92);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #fbbf24;
+}
+
+/* Formulario compartido */
+.mig-form-header {
+  background: linear-gradient(90deg, #fdf2f2 0%, #fff8f8 100%);
+  border: 1px solid #f2d5d5;
+}
+
+.mig-form-thumb {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #991b1b;
+  flex-shrink: 0;
+}
+
+.mig-input-control {
+  border: 1.5px solid #e2d4d4;
+  border-radius: 10px;
+  font-size: 0.98rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mig-input-control:focus {
+  border-color: #991b1b;
+  box-shadow: 0 0 0 4px rgba(153, 27, 27, 0.14);
+}
+
+/* Tabla limpia y legible */
+.mig-tabla-pro thead th {
+  background: #6e0f18;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  border: none;
+  padding: 0.85rem 1rem;
+  white-space: nowrap;
+}
+
+.mig-tabla-pro thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.mig-tabla-pro thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.mig-fila-cita {
+  transition: background-color 0.18s ease;
+}
+
+.mig-fila-cita:hover {
+  background-color: #fdf2f2;
+}
+
+/* Estado vacío */
+.mig-empty-img {
+  width: 105px;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #991b1b;
+  box-shadow: 0 8px 20px rgba(74, 11, 18, 0.16);
+}
+
+/* Botones */
+.mig-btn-submit {
+  background: linear-gradient(135deg, #7f1019 0%, #a61b26 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 0.78rem 1.25rem;
+  box-shadow: 0 8px 18px rgba(127, 16, 25, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.mig-btn-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 22px rgba(127, 16, 25, 0.28);
+}
+
+.mig-btn-cambiar {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1.5px solid #dc2626;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  transition: all 0.18s ease;
+}
+
+.mig-btn-cambiar:hover {
+  background: linear-gradient(135deg, #991b1b, #dc2626);
+  color: #ffffff;
+}
+
+.mig-btn-refrescar {
+  background-color: #fff5f5;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.mig-btn-refrescar:hover {
+  background-color: #fee2e2;
+}
+
+.mig-btn-confirmar {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.mig-btn-confirmar:hover {
+  background-color: #047857;
+  color: #ffffff;
+}
+
+.mig-btn-rechazar {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.mig-btn-rechazar:hover {
+  background-color: #b45309;
+  color: #ffffff;
+}
+
+.mig-btn-eliminar {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.mig-btn-eliminar:hover {
+  background-color: #b91c1c;
+  color: #ffffff;
+}
+
+.mig-btn-submit:active:not(:disabled),
+.mig-btn-confirmar:active,
+.mig-btn-rechazar:active,
+.mig-btn-eliminar:active,
+.mig-btn-cambiar:active,
+.mig-btn-refrescar:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mig-modulo-wrapper,
+  .mig-modulo-wrapper *,
+  .mig-modulo-wrapper *::before,
+  .mig-modulo-wrapper *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
