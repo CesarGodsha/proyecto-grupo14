@@ -30,9 +30,43 @@ export default function RegistroCarga() {
 
   useEffect(() => {
     api.get('/logistica/permisos-gore')
-      .then((r) => setPermisosGore(r.data))
-      .catch(() => {});
-  }, []);
+      .then((r) => {
+        const lista = Array.isArray(r.data) ? r.data : [];
+        const miId = usuario?.id ?? usuario?.id_usuario ?? usuario?.usuario?.id;
+        const miNombre = String(
+          usuario?.nombre ?? usuario?.usuario?.nombre ?? ''
+        )
+          .trim()
+          .toLowerCase();
+
+        if (!miId && !miNombre) {
+          setPermisosGore([]);
+          return;
+        }
+
+        const filtrados = lista.filter((p) => {
+          const duenoId =
+            p.id_usuario ?? p.usuario_id ?? p.id_cliente ?? p.cliente_id;
+          if (miId != null && duenoId != null) {
+            return String(duenoId) === String(miId);
+          }
+
+          const duenoNombre = String(
+            p.administrado ?? p.cliente ?? p.nombre_usuario ?? ''
+          )
+            .trim()
+            .toLowerCase();
+          if (miNombre && duenoNombre) {
+            return duenoNombre === miNombre;
+          }
+
+          return false;
+        });
+
+        setPermisosGore(filtrados);
+      })
+      .catch(() => setPermisosGore([]));
+  }, [usuario]);
 
   const t = Math.max(0.1, Number(toneladas) || 1);
   const extraTon = Math.max(0, t - 5) * 80;

@@ -326,10 +326,13 @@ export default function Inicio() {
                   stroke="url(#oroGore)"
                   strokeWidth="3.5"
                 />
+                {/* Sol radiante andino */}
                 <circle cx="50" cy="34" r="9" fill="url(#oroGore)" />
+                {/* Nevado Huaytapallana / Cordillera Junín */}
                 <path d="M22 64 L40 42 L52 55 L64 39 L78 64 Z" fill="#10b981" opacity="0.9" />
                 <path d="M35 48 L40 42 L45 48 L40 46 Z" fill="#ffffff" />
                 <path d="M59 45 L64 39 L69 45 L64 43 Z" fill="#ffffff" />
+                {/* Cinta inferior */}
                 <rect x="23" y="65" width="54" height="14" rx="4" fill="url(#oroGore)" />
                 <text
                   x="50"

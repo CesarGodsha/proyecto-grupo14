@@ -12,7 +12,7 @@ export default function MenuRoles() {
 
   return (
     <nav className="menu">
-      <strong>Grupo 14</strong>
+      <strong className="marca-menu">Comercio Exterior Junín</strong>
       <NavLink to="/" end>Inicio</NavLink>
 
       {/* Opciones de LogísticaMax Perú según rol */}
@@ -25,7 +25,7 @@ export default function MenuRoles() {
 
       {/* Opciones de Migraciones Perú según rol */}
       {rolMig && !esStaffMig && <NavLink to="/migraciones/registro">Migraciones: nueva cita</NavLink>}
-      {rolMig && !esStaffMig && <NavLink to="/migraciones/consulta">Migraciones: mis citas</NavLink>}
+      {rolMig && <NavLink to="/migraciones/consulta">Migraciones: mis citas</NavLink>}
       {esStaffMig && <NavLink to="/migraciones/panel">Migraciones: panel <small>{rolMig}</small></NavLink>}
 
       <span className="espacio" />
