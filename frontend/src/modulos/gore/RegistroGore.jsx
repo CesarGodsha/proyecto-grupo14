@@ -1,73 +1,84 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, mensajeDeError } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
 
-export default function RegistroGore({ usuario }) {
+export default function RegistroGore({ alRegistrar }) {
+  const { usuario, rolDe } = useAuth();
+
+  const rolGore =
+    (typeof rolDe === 'function' ? rolDe('gore') : null) ||
+    (Array.isArray(usuario?.roles)
+      ? usuario.roles.find((r) => r.modulo === 'gore')?.rol
+      : usuario?.roles?.gore) ||
+    'cliente';
+
+  const esStaffGore = rolGore === 'administrador' || rolGore === 'empleado';
+
+  const [administrado, setAdministrado] = useState(usuario?.nombre || '');
   const [asunto, setAsunto] = useState('');
   const [documento, setDocumento] = useState('solicitud_expediente.pdf');
-  const [resultado, setResultado] = useState(null);
-  const [cargando, setCargando] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
-  const registrar = async (e) => {
+  useEffect(() => {
+    if (!esStaffGore && usuario?.nombre) {
+      setAdministrado(usuario.nombre);
+    }
+  }, [esStaffGore, usuario?.nombre]);
+
+  const manejarEnvio = async (e) => {
     e.preventDefault();
-    setCargando(true);
+    if (!asunto.trim()) return alert('Ingresa el asunto del trámite.');
+
+    setEnviando(true);
     try {
-      const { data } = await api.post('/gore', {
-        id_usuario: usuario?.id || 1,
-        asunto,
-        documento
+      await api.post('/gore', {
+        administrado: esStaffGore
+          ? administrado.trim() || usuario?.nombre || 'Administrado'
+          : usuario?.nombre || administrado,
+        asunto: asunto.trim(),
+        documento: documento.trim() || 'solicitud_expediente.pdf',
+        id_usuario: usuario?.id
       });
-      setResultado(data);
       setAsunto('');
+      if (alRegistrar) alRegistrar();
     } catch (err) {
       alert(mensajeDeError(err));
     } finally {
-      setCargando(false);
+      setEnviando(false);
     }
   };
 
   return (
     <div className="gore-card">
       <h3>Mesa de Partes Virtual — Registro de Expediente</h3>
-      <form onSubmit={registrar} className="gore-form">
+      <form className="gore-form" onSubmit={manejarEnvio}>
         <input
           className="gore-input"
-          value={usuario?.nombre || 'Administrado'}
-          readOnly
+          placeholder="Administrado"
+          value={administrado}
+          readOnly={!esStaffGore}
+          style={!esStaffGore ? { opacity: 0.78, cursor: 'not-allowed' } : undefined}
+          onChange={(e) => {
+            if (esStaffGore) setAdministrado(e.target.value);
+          }}
         />
         <input
           className="gore-input"
-          placeholder="Asunto del trámite (ej. Permiso de transporte de carga pesada)"
+          placeholder="Asunto del trámite (ej. Permiso de transporte regional)"
           value={asunto}
           onChange={(e) => setAsunto(e.target.value)}
           required
         />
         <input
           className="gore-input"
-          placeholder="Nombre del archivo adjunto (ej. solicitud_carga.pdf)"
+          placeholder="Nombre del documento PDF"
           value={documento}
           onChange={(e) => setDocumento(e.target.value)}
         />
-        <button className="gore-btn-primary" type="submit" disabled={cargando}>
-          {cargando ? 'Registrando...' : 'Generar Expediente'}
+        <button type="submit" className="gore-btn-primary" disabled={enviando}>
+          {enviando ? 'Registrando...' : 'Generar Expediente'}
         </button>
       </form>
-
-      {resultado && (
-        <div
-          style={{
-            marginTop: '1.2rem',
-            padding: '1rem 1.2rem',
-            background: 'rgba(16, 185, 129, 0.16)',
-            border: '1px solid rgba(16, 185, 129, 0.5)',
-            borderRadius: '12px',
-            color: '#6ee7b7'
-          }}
-        >
-          <strong>¡Trámite registrado en Neon!</strong> Código de seguimiento:{' '}
-          <strong style={{ color: '#fde68a' }}>{resultado.codigo}</strong> — Estado:{' '}
-          <span className="text-uppercase">{resultado.estado}</span>
-        </div>
-      )}
     </div>
   );
 }

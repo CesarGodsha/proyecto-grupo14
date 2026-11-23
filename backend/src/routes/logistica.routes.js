@@ -75,10 +75,28 @@ r.get('/cotizaciones/mias', w(async (req, res) => {
 
 // 3. Listar trámites disponibles del GORE para vincular en el formulario
 r.get('/permisos-gore', w(async (req, res) => {
+  const roles = Array.isArray(req.usuario?.roles) ? req.usuario.roles : [];
+  const esStaff = roles.some(
+    (rolItem) =>
+      rolItem.modulo === 'logistica' &&
+      ['administrador', 'empleado'].includes(String(rolItem.rol).toLowerCase())
+  );
+
+  if (esStaff) {
+    const { rows } = await pool.query(
+      `SELECT id, 'EXP-' || LPAD(id::text, 5, '0') AS codigo, asunto, estado, id_usuario
+       FROM tramites_mesa_partes
+       ORDER BY id DESC`
+    );
+    return res.json(rows);
+  }
+
   const { rows } = await pool.query(
-    `SELECT id, 'EXP-' || LPAD(id::text, 5, '0') AS codigo, asunto, estado 
-     FROM tramites_mesa_partes 
-     ORDER BY id DESC`
+    `SELECT id, 'EXP-' || LPAD(id::text, 5, '0') AS codigo, asunto, estado, id_usuario
+     FROM tramites_mesa_partes
+     WHERE id_usuario = $1
+     ORDER BY id DESC`,
+    [req.usuario.id]
   );
   res.json(rows);
 }));
