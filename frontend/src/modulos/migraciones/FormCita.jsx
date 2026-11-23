@@ -1,7 +1,14 @@
 import './migraciones.css';
 
 // Formulario compartido por "Registro" y "Actualizar"
-export default function FormCita({ valores, setValores, onEnviar, enviando, boton }) {
+export default function FormCita({
+  valores,
+  setValores,
+  onEnviar,
+  enviando,
+  boton,
+  cotizacionCodigo = null,
+}) {
   const cambiar = (e) => setValores({ ...valores, [e.target.name]: e.target.value });
 
   return (
@@ -23,6 +30,23 @@ export default function FormCita({ valores, setValores, onEnviar, enviando, boto
           <small className="text-muted">Selecciona el tipo de trámite, día y hora disponible</small>
         </div>
       </div>
+
+      {cotizacionCodigo && (
+        <div className="mb-3">
+          <label htmlFor="motivo" className="form-label fw-bold text-dark d-flex align-items-center gap-2">
+            <i className="bi bi-link-45deg text-danger"></i>
+            <span>Motivo / Referencia precargada</span>
+          </label>
+          <input
+            id="motivo"
+            type="text"
+            name="motivo"
+            className="form-control form-control-lg mig-input-control"
+            value={valores.motivo || ''}
+            onChange={cambiar}
+          />
+        </div>
+      )}
 
       <div className="mb-3">
         <label htmlFor="tramite" className="form-label fw-bold text-dark d-flex align-items-center gap-2">

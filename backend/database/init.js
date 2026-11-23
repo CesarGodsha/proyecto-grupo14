@@ -100,44 +100,14 @@ async function init() {
   try {
     const hash = await bcrypt.hash('123456', 10);
 
-    // 10 clientes existentes renombrados como clientes de Migraciones + 20 nuevos (10 Logística, 10 GORE)
-    const clientesLista = [
-      // 10 clientes que ya existían (renombrados como clientes de Migraciones)
-      { nombre: 'Cliente 1 Migración', email: 'cliente1@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 2 Migración', email: 'cliente2@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 3 Migración', email: 'cliente3@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 4 Migración', email: 'cliente4@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 5 Migración', email: 'cliente5@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 6 Migración', email: 'cliente6@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 7 Migración', email: 'cliente7@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 8 Migración', email: 'cliente8@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 9 Migración', email: 'cliente9@correo.pe', modulos: ['migraciones'] },
-      { nombre: 'Cliente 10 Migración', email: 'cliente10@correo.pe', modulos: ['migraciones'] },
-
-      // 10 clientes nuevos para Logística
-      { nombre: 'Cliente 1 Logística', email: 'cliente11@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 2 Logística', email: 'cliente12@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 3 Logística', email: 'cliente13@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 4 Logística', email: 'cliente14@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 5 Logística', email: 'cliente15@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 6 Logística', email: 'cliente16@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 7 Logística', email: 'cliente17@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 8 Logística', email: 'cliente18@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 9 Logística', email: 'cliente19@correo.pe', modulos: ['logistica'] },
-      { nombre: 'Cliente 10 Logística', email: 'cliente20@correo.pe', modulos: ['logistica'] },
-
-      // 10 clientes nuevos para GORE
-      { nombre: 'Cliente 1 GORE', email: 'cliente21@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 2 GORE', email: 'cliente22@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 3 GORE', email: 'cliente23@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 4 GORE', email: 'cliente24@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 5 GORE', email: 'cliente25@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 6 GORE', email: 'cliente26@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 7 GORE', email: 'cliente27@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 8 GORE', email: 'cliente28@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 9 GORE', email: 'cliente29@correo.pe', modulos: ['gore'] },
-      { nombre: 'Cliente 10 GORE', email: 'cliente30@correo.pe', modulos: ['gore'] },
-    ];
+    // 30 clientes de prueba (Cliente 1 .. Cliente 30) con rol 'cliente' en los 3 módulos
+    const clientesLista = Array.from({ length: 30 }, (_, idx) => {
+      const num = idx + 1;
+      return {
+        nombre: `Cliente ${num}`,
+        email: `cliente${num}@correo.pe`,
+      };
+    });
 
     for (const cli of clientesLista) {
       const { rows } = await pool.query(
@@ -145,7 +115,7 @@ async function init() {
          ON CONFLICT (email) DO UPDATE SET nombre = EXCLUDED.nombre RETURNING id`,
         [cli.nombre, cli.email, hash]
       );
-      for (const m of cli.modulos) {
+      for (const m of ['logistica', 'gore', 'migraciones']) {
         await pool.query(
           `INSERT INTO usuario_rol (id_usuario, modulo, rol) VALUES ($1,$2,'cliente')
            ON CONFLICT (id_usuario, modulo) DO NOTHING`,

@@ -1,19 +1,49 @@
 import './migraciones.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { api, mensajeDeError } from '../../api/client.js';
 import FormCita from './FormCita.jsx';
 
 export default function RegistroCita() {
-  const [valores, setValores] = useState({ tramite: 'Pasaporte', fecha: '', hora: '' });
+  const [searchParams] = useSearchParams();
+  const cotizacionParam = searchParams.get('cotizacion');
+  const cotizacionId = cotizacionParam ? Number(cotizacionParam) : null;
+  const codigoCotizacion = cotizacionId
+    ? `COT-${String(cotizacionId).padStart(5, '0')}`
+    : null;
+
+  const [valores, setValores] = useState({
+    tramite: 'Pasaporte',
+    fecha: '',
+    hora: '',
+    motivo: '',
+  });
   const [enviando, setEnviando] = useState(false);
   const [aviso, setAviso] = useState(null);
+
+  useEffect(() => {
+    if (!codigoCotizacion) return;
+    setValores((prev) => ({
+      ...prev,
+      motivo: prev.motivo || `Trámite vinculado a viaje/cotización ${codigoCotizacion}`,
+    }));
+  }, [codigoCotizacion]);
 
   async function enviar(e) {
     e.preventDefault();
     setEnviando(true);
+    setAviso(null);
     try {
-      const { data } = await api.post('/migraciones/citas', valores);
-      setAviso({ ok: true, texto: `Cita registrada · ${data.codigo}` });
+      const { data } = await api.post('/migraciones/citas', {
+        ...valores,
+        id_cotizacion: cotizacionId || null,
+      });
+      setAviso({
+        ok: true,
+        texto: `Cita registrada · ${data.codigo}${
+          codigoCotizacion ? ` (vinculada a ${codigoCotizacion})` : ''
+        }`,
+      });
     } catch (err) {
       setAviso({ ok: false, texto: mensajeDeError(err) });
     } finally {
@@ -66,6 +96,15 @@ export default function RegistroCita() {
         </div>
       </div>
 
+      {codigoCotizacion && (
+        <div className="alert alert-info d-flex align-items-center gap-2 mb-4" role="status">
+          <i className="bi bi-link-45deg fs-5"></i>
+          <span>
+            Datos precargados desde LogísticaMax: <strong>{codigoCotizacion}</strong>.
+          </span>
+        </div>
+      )}
+
       {aviso && (
         <div
           className={`${aviso.ok ? 'exito' : 'error'} d-flex align-items-center gap-2 mb-4`}
@@ -88,6 +127,7 @@ export default function RegistroCita() {
             onEnviar={enviar}
             enviando={enviando}
             boton="Agendar cita"
+            cotizacionCodigo={codigoCotizacion}
           />
         </div>
 
