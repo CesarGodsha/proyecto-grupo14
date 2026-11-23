@@ -67,18 +67,26 @@ r.post('/cotizaciones', w(async (req, res) => {
 // 2. Consulta: mis cotizaciones / viajes asignados
 r.get('/cotizaciones/mias', w(async (req, res) => {
   const { rows } = await pool.query(
-    SEL + ' WHERE c.id_usuario = $1 OR c.id_usuario IS NULL ORDER BY c.id DESC',
+    SEL + ' WHERE c.id_usuario = $1 ORDER BY c.id DESC',
     [req.usuario.id]
   );
   res.json(rows);
 }));
 
-// 3. Listar trámites disponibles del GORE para vincular en el formulario
+// 3. Listar trámites del GORE únicamente del usuario logueado
 r.get('/permisos-gore', w(async (req, res) => {
   const { rows } = await pool.query(
-    `SELECT id, 'EXP-' || LPAD(id::text, 5, '0') AS codigo, asunto, estado 
-     FROM tramites_mesa_partes 
-     ORDER BY id DESC`
+    `SELECT 
+       id,
+       id_usuario,
+       administrado,
+       'EXP-' || LPAD(id::text, 5, '0') AS codigo,
+       asunto,
+       estado
+     FROM tramites_mesa_partes
+     WHERE id_usuario = $1
+     ORDER BY id DESC`,
+    [req.usuario.id]
   );
   res.json(rows);
 }));

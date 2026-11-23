@@ -70,8 +70,13 @@ export default function Inicio() {
       <h1>Hola, {usuario.nombre}</h1>
       <p>Tus roles en este sistema:</p>
       <ul>
-        {Object.entries(usuario.roles || {}).map(([mod, rol]) => (
-          <li key={mod}><strong>{mod}</strong>: {rol}</li>
+        {(Array.isArray(usuario.roles)
+          ? usuario.roles.map((r) => [r.modulo, r.rol])
+          : Object.entries(usuario.roles || {})
+        ).map(([mod, rol], idx) => (
+          <li key={`${mod}-${idx}`}>
+            <strong>{mod}</strong>: {typeof rol === 'object' && rol !== null ? rol.rol : rol}
+          </li>
         ))}
       </ul>
     </div>

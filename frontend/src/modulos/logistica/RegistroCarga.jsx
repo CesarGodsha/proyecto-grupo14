@@ -29,10 +29,24 @@ export default function RegistroCarga() {
   const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
-    api.get('/logistica/permisos-gore')
-      .then((r) => setPermisosGore(r.data))
-      .catch(() => {});
-  }, []);
+    if (!usuario) return;
+    api.get('/logistica/permisos-gore', {
+      params: { usuario_id: usuario.id, administrado: usuario.nombre },
+    })
+      .then((r) => {
+        const lista = Array.isArray(r.data) ? r.data : [];
+        const nombreActual = (usuario.nombre || '').trim().toLowerCase();
+        const soloDelUsuario = lista.filter((p) => {
+          const duenoId = p.usuario_id ?? p.cliente_id ?? p.id_usuario;
+          const duenoNombre = (p.administrado || p.cliente || p.solicitante || '').trim().toLowerCase();
+          if (duenoId != null) return Number(duenoId) === Number(usuario.id);
+          if (duenoNombre) return duenoNombre === nombreActual;
+          return false;
+        });
+        setPermisosGore(soloDelUsuario);
+      })
+      .catch(() => setPermisosGore([]));
+  }, [usuario]);
 
   const t = Math.max(0.1, Number(toneladas) || 1);
   const extraTon = Math.max(0, t - 5) * 80;
@@ -121,7 +135,11 @@ export default function RegistroCarga() {
           <div className="log-field">
             <label>Permiso GORE Junín (Requerido para confirmar despacho)</label>
             <select className="log-select" value={idTramite} onChange={(e) => setIdTramite(e.target.value)}>
-              <option value="">-- Vincular expediente GORE (opcional al registrar) --</option>
+              <option value="">
+                {permisosGore.length > 0
+                  ? '-- Vincular expediente GORE propio (opcional al registrar) --'
+                  : '-- No tienes expedientes GORE registrados a tu nombre --'}
+              </option>
               {permisosGore.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.codigo} · {p.asunto} [{p.estado}]
