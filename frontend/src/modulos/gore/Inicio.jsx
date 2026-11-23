@@ -5,9 +5,163 @@ import ConsultaGore from './ConsultaGore';
 import PanelGore from './PanelGore';
 import './gore.css';
 
+const PANELES_LATERALES = {
+  registro: {
+    izquierda: [
+      {
+        titulo: 'Requisitos Digitales',
+        subtitulo: 'Documentación clara y foliada',
+        descripcion: 'Ten a la mano tu DNI o RUC y redacta el asunto detallando el área o gerencia destino.',
+        etiqueta: 'Paso 1 • Preparación',
+        imagen: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=650&q=80'
+      },
+      {
+        titulo: 'Sede Central Huancayo',
+        subtitulo: 'Jr. Loreto N° 363 — Junín',
+        descripcion: 'Tu solicitud ingresa directamente al sistema de trámite documentario regional las 24 horas.',
+        etiqueta: 'Mesa Virtual 24/7',
+        imagen: 'https://imgs.search.brave.com/YzNeAICmd0UizPHDTR08JlR5s8woSRCmyXdRwF_6Ngc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9j/L2NkL1NlZGVfR29i/aWVybm9fUmVnaW9u/YWxfSnVuJUMzJUFE/bi5qcGc'
+      }
+    ],
+    derecha: [
+      {
+        titulo: 'Derivación Inmediata',
+        subtitulo: 'Gerencias y Direcciones',
+        descripcion: 'Cada expediente registrado recibe un código único para su derivación y evaluación técnica.',
+        etiqueta: 'Gestión Ágil',
+        imagen: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=650&q=80'
+      },
+      {
+        titulo: 'Conexión Intersectorial',
+        subtitulo: 'GORE • Logística • Migraciones',
+        descripcion: 'Sincronizado para validar autorizaciones de carga, transporte y gestión pública.',
+        etiqueta: 'Portal Integrado',
+        imagen: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=650&q=80'
+      }
+    ]
+  },
+  consulta: {
+    izquierda: [
+      {
+        titulo: 'Búsqueda por Código',
+        subtitulo: 'Trazabilidad en tiempo real',
+        descripcion: 'Ingresa tu código de expediente para revisar el historial, fecha de ingreso y área asignada.',
+        etiqueta: 'Consulta 24/7',
+        imagen: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=650&q=80'
+      },
+      {
+        titulo: 'Estados del Trámite',
+        subtitulo: 'Pendiente • En Proceso • Aprobado',
+        descripcion: 'Visualiza al instante si tu expediente ya cuenta con conformidad o resolución emitida.',
+        etiqueta: 'Transparencia',
+        imagen: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=650&q=80'
+      }
+    ],
+    derecha: []
+  },
+  panel: {
+    izquierda: [
+      {
+        titulo: 'Control de Expedientes',
+        subtitulo: 'Bandeja de Gerencia',
+        descripcion: 'Revisa los trámites ingresados por los administrados y verifica su sustento.',
+        etiqueta: 'Supervisión',
+        imagen: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=650&q=80'
+      },
+      {
+        titulo: 'Sede Central Huancayo',
+        subtitulo: 'Jr. Loreto N° 363 — Junín',
+        descripcion: 'Gestión administrativa y control documentario de las gerencias regionales.',
+        etiqueta: 'GORE Junín',
+        imagen: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=650&q=80'
+      }
+    ],
+    derecha: []
+  }
+};
+
+function TarjetaVisual({ item, idUnico, hoverId, setHoverId, alturaImagen = '118px' }) {
+  const activa = hoverId === idUnico;
+  return (
+    <article
+      onMouseEnter={() => setHoverId(idUnico)}
+      onMouseLeave={() => setHoverId(null)}
+      style={{
+        borderRadius: '18px',
+        overflow: 'hidden',
+        background: activa
+          ? 'linear-gradient(160deg, rgba(6, 78, 59, 0.92) 0%, rgba(2, 35, 27, 0.96) 100%)'
+          : 'rgba(2, 32, 25, 0.78)',
+        border: activa
+          ? '1.5px solid rgba(251, 191, 36, 0.78)'
+          : '1px solid rgba(52, 211, 153, 0.25)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: activa
+          ? '0 16px 32px rgba(0, 0, 0, 0.45), 0 0 18px rgba(251, 191, 36, 0.22)'
+          : '0 10px 24px rgba(0, 0, 0, 0.28)',
+        transform: activa ? 'translateY(-5px) scale(1.015)' : 'translateY(0) scale(1)',
+        transition: 'all 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
+      <div style={{ position: 'relative', height: alturaImagen, overflow: 'hidden', flexShrink: 0 }}>
+        <img
+          src={item.imagen}
+          alt={item.titulo}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transform: activa ? 'scale(1.09)' : 'scale(1)',
+            transition: 'transform 0.55s ease'
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, rgba(2, 32, 25, 0.92) 0%, rgba(2, 32, 25, 0.12) 65%)'
+          }}
+        />
+        <span
+          style={{
+            position: 'absolute',
+            top: '9px',
+            right: '9px',
+            padding: '0.2rem 0.6rem',
+            borderRadius: '999px',
+            fontSize: '0.68rem',
+            fontWeight: 800,
+            letterSpacing: '0.04em',
+            background: 'rgba(2, 24, 19, 0.86)',
+            color: '#fbbf24',
+            border: '1px solid rgba(251, 191, 36, 0.5)'
+          }}
+        >
+          {item.etiqueta}
+        </span>
+      </div>
+
+      <div style={{ padding: '0.9rem 1rem 1.05rem' }}>
+        <h3 style={{ margin: '0 0 0.2rem', fontSize: '0.95rem', fontWeight: 800, color: '#fbbf24' }}>
+          {item.titulo}
+        </h3>
+        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6ee7b7', marginBottom: '0.4rem' }}>
+          {item.subtitulo}
+        </div>
+        <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.45, color: '#d1fae5' }}>
+          {item.descripcion}
+        </p>
+      </div>
+    </article>
+  );
+}
+
 export default function Inicio() {
   const { usuario, rolDe } = useAuth();
   const [recargarKey, setRecargarKey] = useState(0);
+  const [hoverId, setHoverId] = useState(null);
   const canvasRef = useRef(null);
 
   const rolGore =
@@ -122,6 +276,8 @@ export default function Inicio() {
     };
   }, []);
 
+  const panelesActivos = PANELES_LATERALES[pestana] || PANELES_LATERALES.registro;
+
   return (
     <div className="gore-wrapper">
       <canvas ref={canvasRef} className="gore-canvas" />
@@ -164,20 +320,16 @@ export default function Inicio() {
                     <stop offset="100%" stopColor="#d97706" />
                   </linearGradient>
                 </defs>
-                {/* Escudo exterior */}
                 <path
                   d="M50 6 L86 20 V50 C86 73 70 88 50 95 C30 88 14 73 14 50 V20 Z"
                   fill="rgba(2, 44, 34, 0.9)"
                   stroke="url(#oroGore)"
                   strokeWidth="3.5"
                 />
-                {/* Sol radiante andino */}
                 <circle cx="50" cy="34" r="9" fill="url(#oroGore)" />
-                {/* Nevado Huaytapallana / Cordillera Junín */}
                 <path d="M22 64 L40 42 L52 55 L64 39 L78 64 Z" fill="#10b981" opacity="0.9" />
                 <path d="M35 48 L40 42 L45 48 L40 46 Z" fill="#ffffff" />
                 <path d="M59 45 L64 39 L69 45 L64 43 Z" fill="#ffffff" />
-                {/* Cinta inferior */}
                 <rect x="23" y="65" width="54" height="14" rx="4" fill="url(#oroGore)" />
                 <text
                   x="50"
@@ -204,7 +356,7 @@ export default function Inicio() {
             </div>
           </div>
 
-          {/* Tarjeta visual lateral derecha con vista de la Sierra Central / Junín */}
+          {/* Tarjeta visual lateral derecha */}
           <div
             style={{
               display: 'flex',
@@ -271,18 +423,83 @@ export default function Inicio() {
           )}
         </nav>
 
-        <main>
-          {pestana === 'registro' && (
-            <RegistroGore
-              alRegistrar={() => {
-                setRecargarKey((k) => k + 1);
-                setPestana('consulta');
-              }}
-            />
-          )}
-          {pestana === 'consulta' && <ConsultaGore key={`c-${recargarKey}`} />}
-          {esStaffGore && pestana === 'panel' && <PanelGore key={`p-${recargarKey}`} />}
-        </main>
+        {/* DISTRIBUCIÓN DE CONTENIDO Y TARJETAS LATERALES */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1.35rem',
+            alignItems: 'flex-start'
+          }}
+        >
+          {/* COLUMNA IZQUIERDA (2 TARJETAS APILADAS) */}
+          <aside
+            aria-label="Información lateral izquierda"
+            style={{
+              flex: '1 1 255px',
+              maxWidth: '285px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem'
+            }}
+          >
+            {panelesActivos.izquierda.map((item, idx) => (
+              <TarjetaVisual
+                key={`${pestana}-izq-${idx}`}
+                item={item}
+                idUnico={`${pestana}-izq-${idx}`}
+                hoverId={hoverId}
+                setHoverId={setHoverId}
+                alturaImagen="125px"
+              />
+            ))}
+          </aside>
+
+          {/* COLUMNA DERECHA: FORMULARIO/TABLA ARRIBA + TARJETAS INFERIORES SOLO SI EXISTEN */}
+          <div
+            style={{
+              flex: '999 1 520px',
+              minWidth: 'min(100%, 480px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem'
+            }}
+          >
+            <main>
+              {pestana === 'registro' && (
+                <RegistroGore
+                  alRegistrar={() => {
+                    setRecargarKey((k) => k + 1);
+                    setPestana('consulta');
+                  }}
+                />
+              )}
+              {pestana === 'consulta' && <ConsultaGore key={`c-${recargarKey}`} />}
+              {esStaffGore && pestana === 'panel' && <PanelGore key={`p-${recargarKey}`} />}
+            </main>
+
+            {panelesActivos.derecha.length > 0 && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                  gap: '1.25rem'
+                }}
+              >
+                {panelesActivos.derecha.map((item, idx) => (
+                  <TarjetaVisual
+                    key={`${pestana}-der-${idx}`}
+                    item={item}
+                    idUnico={`${pestana}-der-${idx}`}
+                    hoverId={hoverId}
+                    setHoverId={setHoverId}
+                    alturaImagen="120px"
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
