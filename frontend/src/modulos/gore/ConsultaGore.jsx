@@ -1,17 +1,46 @@
 import { useEffect, useState } from 'react';
 import { api, mensajeDeError } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
 
 export default function ConsultaGore() {
+  const { usuario, rolDe } = useAuth();
   const [todosTramites, setTodosTramites] = useState([]);
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
   const [cargando, setCargando] = useState(false);
 
+  const rolGore =
+    (typeof rolDe === 'function' ? rolDe('gore') : null) ||
+    (Array.isArray(usuario?.roles)
+      ? usuario.roles.find((r) => r.modulo === 'gore')?.rol
+      : usuario?.roles?.gore) ||
+    'cliente';
+
+  const esStaffGore = rolGore === 'administrador' || rolGore === 'empleado';
+
   const cargarTramites = async () => {
     setCargando(true);
     try {
       const { data } = await api.get('/gore');
-      setTodosTramites(Array.isArray(data) ? data : []);
+      const lista = Array.isArray(data) ? data : [];
+
+      const listaPermitida = esStaffGore
+        ? lista
+        : lista.filter((t) => {
+            const coincideId =
+              usuario?.id != null &&
+              t.id_usuario != null &&
+              Number(t.id_usuario) === Number(usuario.id);
+
+            const coincideNombre =
+              Boolean(usuario?.nombre) &&
+              Boolean(t.administrado) &&
+              t.administrado.trim().toLowerCase() === usuario.nombre.trim().toLowerCase();
+
+            return coincideId || coincideNombre;
+          });
+
+      setTodosTramites(listaPermitida);
     } catch (err) {
       console.error(mensajeDeError(err));
     } finally {
@@ -21,7 +50,7 @@ export default function ConsultaGore() {
 
   useEffect(() => {
     cargarTramites();
-  }, []);
+  }, [esStaffGore, usuario?.id, usuario?.nombre]);
 
   const tramitesFiltrados = todosTramites.filter((t) => {
     const codigo = (t.codigo || `EXP-${String(t.id).padStart(5, '0')}`).toLowerCase();
@@ -43,13 +72,21 @@ export default function ConsultaGore() {
 
   return (
     <div className="gore-card">
-      <h3>Consulta Pública de Expedientes — Mesa de Partes GORE Junín</h3>
+      <h3>
+        {esStaffGore
+          ? 'Consulta General de Expedientes — Mesa de Partes GORE Junín'
+          : 'Mis Expedientes — Mesa de Partes GORE Junín'}
+      </h3>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
         <input
           className="gore-input"
           style={{ flex: '1 1 280px' }}
-          placeholder="Buscar por número (30), código (EXP-00030), administrado o asunto..."
+          placeholder={
+            esStaffGore
+              ? 'Buscar por número (30), código (EXP-00030), administrado o asunto...'
+              : 'Buscar en mis expedientes por código o asunto...'
+          }
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
@@ -110,7 +147,9 @@ export default function ConsultaGore() {
             ) : tramitesFiltrados.length === 0 ? (
               <tr>
                 <td colSpan="5" style={{ textAlign: 'center', color: '#94a3b8' }}>
-                  No se encontraron expedientes con ese criterio.
+                  {esStaffGore
+                    ? 'No se encontraron expedientes con ese criterio.'
+                    : 'Aún no tienes expedientes registrados a tu nombre.'}
                 </td>
               </tr>
             ) : (

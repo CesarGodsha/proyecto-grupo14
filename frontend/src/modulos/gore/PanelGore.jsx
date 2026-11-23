@@ -1,9 +1,20 @@
 import { useEffect, useState } from 'react';
 import { api, mensajeDeError } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PanelGore() {
+  const { usuario, rolDe } = useAuth();
   const [tramites, setTramites] = useState([]);
   const [cargando, setCargando] = useState(false);
+
+  const rolGore =
+    (typeof rolDe === 'function' ? rolDe('gore') : null) ||
+    (Array.isArray(usuario?.roles)
+      ? usuario.roles.find((r) => r.modulo === 'gore')?.rol
+      : usuario?.roles?.gore) ||
+    'cliente';
+
+  const esStaffGore = rolGore === 'administrador' || rolGore === 'empleado';
 
   const cargar = async () => {
     setCargando(true);
@@ -18,8 +29,21 @@ export default function PanelGore() {
   };
 
   useEffect(() => {
-    cargar();
-  }, []);
+    if (esStaffGore) {
+      cargar();
+    }
+  }, [esStaffGore]);
+
+  if (!esStaffGore) {
+    return (
+      <div className="gore-card">
+        <h3>Acceso Restringido</h3>
+        <p style={{ color: '#fde68a', marginTop: '0.5rem' }}>
+          La Bandeja de Atención y aprobación de expedientes es exclusiva para el personal autorizado del GORE Junín.
+        </p>
+      </div>
+    );
+  }
 
   const cambiarEstado = async (id, nuevoEstado) => {
     try {
