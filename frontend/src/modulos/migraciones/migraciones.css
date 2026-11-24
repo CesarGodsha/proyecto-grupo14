@@ -1,0 +1,647 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
+
+/* 1. Barra superior (.menu) en vistas de Migraciones */
+body:has(.mig) .menu {
+  background: rgba(10, 14, 26, 0.92) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+body:has(.mig) .menu a {
+  color: rgba(255, 255, 255, 0.84) !important;
+  background: transparent !important;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s;
+}
+
+body:has(.mig) .menu a:hover {
+  color: #fff !important;
+  background: rgba(179, 18, 43, 0.32) !important;
+}
+
+body:has(.mig) .menu a.active,
+body:has(.mig) .menu a[aria-current="page"] {
+  color: #fff !important;
+  background: linear-gradient(120deg, #b3122b, #7d091b) !important;
+  box-shadow: 0 4px 12px -4px rgba(179, 18, 43, 0.75);
+}
+
+body:has(.mig) .menu button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+body:has(.mig) .menu button:hover {
+  background: #b3122b !important;
+  border-color: #b3122b !important;
+}
+
+/* 2. Neutraliza fondos heredados de otros módulos o globales en Migraciones */
+body:has(.mig),
+body:has(.mig) #root,
+body:has(.mig) main,
+body:has(.mig) .app-contenedor,
+body:has(.mig) .contenedor-principal {
+  background-image: none !important;
+  background-color: #070912 !important;
+}
+
+body:has(.mig) [class*="fondo"]:not(.mig):not(.mig *),
+body:has(.mig) [class*="bg-"]:not(.mig):not(.mig *):not(.badge):not(.alert),
+body:has(.mig) img[src*="pexels"]:not(.mig *),
+body:has(.mig) img[src*="giphy"]:not(.mig *) {
+  display: none !important;
+}
+
+/* 3. Contenedor principal de Migraciones */
+.mig {
+  --rojo: #b3122b;
+  --rojo-osc: #7d091b;
+  --tinta: #24181a;
+  --crema: #fbf7f2;
+  --linea: #e7ddd3;
+
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 54px);
+  padding: 28px 20px 56px;
+  overflow-x: hidden;
+  background: transparent !important;
+}
+
+.mig > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 4. Cielo nocturno con estrellas, estrellas fugaces, aviones y widgets laterales */
+.mig-cielo-animado {
+  position: fixed;
+  inset: 0;
+  z-index: 0 !important;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(190, 18, 60, 0.22), transparent 70%),
+    radial-gradient(circle at 80% 75%, rgba(30, 58, 138, 0.2), transparent 55%),
+    linear-gradient(180deg, #060811 0%, #0a0d19 55%, #06080f 100%);
+}
+
+.mig-estrellas-capa {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+}
+
+.mig-estrellas-lejanas {
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 90px 70px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 150px 120px, rgba(255, 241, 242, 0.8), transparent),
+    radial-gradient(1px 1px at 210px 45px, rgba(255, 255, 255, 0.55), transparent);
+  background-size: 240px 180px;
+  animation: migParpadeoEstrellas 5s ease-in-out infinite alternate;
+}
+
+.mig-estrellas-cercanas {
+  background-image:
+    radial-gradient(1.8px 1.8px at 55px 95px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 175px 35px, rgba(254, 205, 211, 0.75), transparent),
+    radial-gradient(2px 2px at 260px 140px, rgba(255, 255, 255, 0.95), transparent);
+  background-size: 320px 220px;
+  opacity: 0.75;
+  animation: migDesplazarEstrellas 40s linear infinite;
+}
+
+.mig-estrella-fugaz {
+  position: absolute;
+  width: 130px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(251, 113, 133, 0.65),
+    transparent
+  );
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+  opacity: 0;
+  transform: rotate(-35deg) translate3d(0, 0, 0);
+  animation-name: migCaidaEstrellaFugaz;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+.mig-avion-fondo {
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 14px rgba(251, 113, 133, 0.45);
+  opacity: 0;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+.mig-avion-derecha {
+  animation-name: migVueloDerecha;
+}
+
+.mig-avion-izquierda {
+  animation-name: migVueloIzquierda;
+}
+
+.mig-widget-lateral {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 190px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(16, 20, 36, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.85);
+  animation: migFlotarWidget 6.5s ease-in-out infinite alternate;
+}
+
+.mig-widget-izq {
+  left: 20px;
+  bottom: 42px;
+}
+
+.mig-widget-der {
+  right: 20px;
+  bottom: 42px;
+  animation-delay: 2.2s;
+}
+
+.mig-widget-icono {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  color: #fda4af;
+  background: rgba(179, 18, 43, 0.24);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  animation: migPulsoIcono 3.2s ease-in-out infinite alternate;
+}
+
+.mig-widget-texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.mig-widget-texto strong {
+  font-size: 0.82rem;
+  color: #f8fafc;
+}
+
+.mig-widget-texto span {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  margin-top: 2px;
+}
+
+@keyframes migFlotarWidget {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes migPulsoIcono {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.25);
+  }
+  100% {
+    transform: scale(1.07);
+    box-shadow: 0 0 14px 2px rgba(251, 113, 133, 0.28);
+  }
+}
+
+@media (max-width: 1360px) {
+  .mig-widget-lateral {
+    display: none !important;
+  }
+}
+
+@keyframes migVueloDerecha {
+  0% {
+    opacity: 0;
+    transform: translate3d(-12vw, 18px, 0) rotate(36deg) scale(0.95);
+  }
+  10% {
+    opacity: var(--mig-avion-opacidad, 0.3);
+  }
+  50% {
+    transform: translate3d(52vw, -12px, 0) rotate(36deg) scale(1);
+  }
+  90% {
+    opacity: var(--mig-avion-opacidad, 0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(112vw, -36px, 0) rotate(36deg) scale(0.95);
+  }
+}
+
+@keyframes migVueloIzquierda {
+  0% {
+    opacity: 0;
+    transform: translate3d(112vw, -16px, 0) rotate(-144deg) scale(0.95);
+  }
+  10% {
+    opacity: var(--mig-avion-opacidad, 0.28);
+  }
+  50% {
+    transform: translate3d(48vw, 14px, 0) rotate(-144deg) scale(1);
+  }
+  90% {
+    opacity: var(--mig-avion-opacidad, 0.28);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-12vw, 38px, 0) rotate(-144deg) scale(0.95);
+  }
+}
+
+@keyframes migParpadeoEstrellas {
+  0% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes migDesplazarEstrellas {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-160px, 110px, 0);
+  }
+}
+
+@keyframes migCaidaEstrellaFugaz {
+  0% {
+    opacity: 0;
+    transform: rotate(-35deg) translate3d(0, 0, 0);
+  }
+  8% {
+    opacity: 1;
+  }
+  24% {
+    opacity: 0;
+    transform: rotate(-35deg) translate3d(-360px, 250px, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-35deg) translate3d(-360px, 250px, 0);
+  }
+}
+
+/* 5. Animación de transición al cargar las secciones */
+@keyframes migEntradaSuave {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.mig-anim-entrada {
+  animation: migEntradaSuave 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mig-anim-retraso-1 {
+  animation-delay: 0.08s;
+}
+
+.mig-anim-retraso-2 {
+  animation-delay: 0.16s;
+}
+
+.mig-anim-retraso-3 {
+  animation-delay: 0.24s;
+}
+
+/* 6. Banner superior de Migraciones */
+.mig-hero-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 24px 28px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(251, 191, 36, 0.2), transparent 45%),
+    radial-gradient(circle at 88% 75%, rgba(244, 63, 94, 0.26), transparent 50%),
+    linear-gradient(125deg, #961026 0%, #5c0716 58%, #290811 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.75);
+}
+
+.mig-hero-glow {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 120deg at 50% 50%,
+    rgba(255, 255, 255, 0.08),
+    transparent 35%,
+    rgba(251, 191, 36, 0.12),
+    transparent 75%
+  );
+  animation: migGiroLuz 18s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes migGiroLuz {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mig-hero-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.mig .mig-titulo-banner {
+  font-family: 'Fraunces', Georgia, serif;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: clamp(1.45rem, 2.4vw, 2.05rem);
+  color: #fff;
+}
+
+.mig-hero-badge-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(18, 10, 14, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.mig-avion-ruta {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 1.55rem;
+  animation: migAvionBanner 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes migAvionBanner {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-18deg);
+  }
+  100% {
+    transform: translate3d(-8px, -6px, 0) rotate(-14deg);
+  }
+}
+
+/* 7. Tarjetas, formulario, requisitos y cuadro inferior de video */
+.mig .tarjeta {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 26px;
+  border-radius: 16px;
+  border: 1px solid var(--linea);
+  background: var(--crema) !important;
+  color: var(--tinta) !important;
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+}
+
+.mig .mig-form-header {
+  background: #f5ede4;
+  border: 1px solid var(--linea);
+}
+
+.mig .mig-form-thumb {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.35);
+}
+
+.mig label {
+  color: var(--tinta) !important;
+  font-weight: 600;
+}
+
+.mig input,
+.mig select,
+.mig textarea {
+  background: #fff !important;
+  color: var(--tinta) !important;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mig input:focus,
+.mig select:focus,
+.mig textarea:focus {
+  outline: none;
+  border-color: var(--rojo) !important;
+  box-shadow: 0 0 0 3px rgba(179, 18, 43, 0.18) !important;
+}
+
+.mig .mig-btn-submit,
+.mig button {
+  background: linear-gradient(120deg, var(--rojo), var(--rojo-osc)) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-weight: 600;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.mig .mig-btn-submit:hover:not(:disabled),
+.mig button:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px -8px rgba(179, 18, 43, 0.8);
+}
+
+.mig .mig-side-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: var(--crema) !important;
+  color: var(--tinta) !important;
+  border: 1px solid var(--linea);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+}
+
+.mig .mig-side-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 185px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #2b1318;
+}
+
+.mig .mig-side-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mig .mig-side-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(24, 12, 16, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.mig .mig-side-body {
+  position: relative;
+  z-index: 2;
+  background: var(--crema);
+}
+
+.mig .mig-video-card {
+  border-radius: 16px;
+  padding: 24px;
+  background: var(--crema) !important;
+  color: var(--tinta) !important;
+  border: 1px solid var(--linea);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+}
+
+.mig .mig-video-frame {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d101d;
+  border: 1px solid rgba(36, 24, 26, 0.14);
+  box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.45);
+}
+
+.mig .mig-video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* 8. Tablas, enlaces y alertas */
+.mig .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 14px;
+}
+
+.mig table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.5);
+}
+
+.mig th,
+.mig td {
+  padding: 12px 16px !important;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.mig th {
+  background: var(--tinta);
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mig tbody tr:nth-child(even) {
+  background: var(--crema);
+}
+
+.mig tbody tr:hover {
+  background: #f6e9e6;
+}
+
+.mig a {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+.mig .exito,
+.mig .error {
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+.mig .exito {
+  background: #e6f4ea;
+  color: #134e2a;
+}
+
+.mig .error {
+  background: #fdecea;
+  color: #8a1c13;
+}
+
+@media (max-width: 700px) {
+  .mig {
+    padding: 18px 12px 36px;
+  }
+
+  .mig-hero-banner {
+    padding: 18px;
+  }
+
+  .mig .tarjeta,
+  .mig .mig-video-card {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mig-cielo-animado *,
+  .mig-anim-entrada,
+  .mig-avion-ruta,
+  .mig-hero-glow {
+    animation: none !important;
+  }
+}
