@@ -1,0 +1,12 @@
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import authRoutes from './routes/auth.routes.js';
+import modRoutes from './routes/logistica.routes.js';
+const app=express(); app.use(cors()); app.use(express.json());
+app.get('/api/salud',(req,res)=>res.json({ok:true,modulo:'logistica'}));
+app.use('/api/auth',authRoutes);
+app.use('/api/logistica',modRoutes);
+app.use((req,res)=>res.status(404).json({mensaje:'Ruta no encontrada'}));
+app.use((err,req,res,next)=>{console.error(err); res.status(500).json({mensaje:'Error interno'});});
+const PORT=process.env.PORT||3002; app.listen(PORT,()=>console.log('logistica API '+PORT));
