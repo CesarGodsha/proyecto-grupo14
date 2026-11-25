@@ -1,0 +1,12 @@
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import authRoutes from './routes/auth.routes.js';
+import modRoutes from './routes/gore.routes.js';
+const app=express(); app.use(cors()); app.use(express.json());
+app.get('/api/salud',(req,res)=>res.json({ok:true,modulo:'gore'}));
+app.use('/api/auth',authRoutes);
+app.use('/api/gore',modRoutes);
+app.use((req,res)=>res.status(404).json({mensaje:'Ruta no encontrada'}));
+app.use((err,req,res,next)=>{console.error(err); res.status(500).json({mensaje:'Error interno'});});
+const PORT=process.env.PORT||3003; app.listen(PORT,()=>console.log('gore API '+PORT));
