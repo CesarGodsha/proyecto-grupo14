@@ -1,0 +1,3 @@
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+export default function MenuMigraciones(){ const {usuario,logout,rolDe}=useAuth(); const rol=rolDe('migraciones'); const staff=rol==='administrador'||rol==='empleado'; return (<nav className="menu"><strong>Migraciones Peru - {rol}</strong><NavLink to="/" end>Inicio</NavLink>{rol&&!staff&&<NavLink to="/migraciones/registro">Nueva cita</NavLink>}{rol&&<NavLink to="/migraciones/consulta">Mis citas</NavLink>}{staff&&<NavLink to="/migraciones/panel">Panel {rol}</NavLink>}<span>{usuario?.nombre}</span><button onClick={logout}>Salir</button></nav>);}
