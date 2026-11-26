@@ -643,3 +643,141 @@ body:has(.mig) img[src*="giphy"]:not(.mig *) {
     animation: none !important;
   }
 }
+
+.mig-home-guide {
+  margin-top: 30px;
+  padding: clamp(18px, 3vw, 28px);
+  overflow: hidden;
+  border: 1px solid #ead8dc;
+  border-radius: 21px;
+  background:
+    radial-gradient(circle at 94% 5%, rgba(251, 191, 36, 0.13), transparent 26%),
+    linear-gradient(125deg, #fff 0%, #fff8f4 62%, #fff1f2 100%);
+  box-shadow: 0 17px 38px rgba(33, 17, 22, 0.14);
+  animation: migGuideArrive 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mig-home-guide .mig-home-section-heading {
+  margin: 0 0 17px;
+}
+
+.mig-home-guide .mig-home-section-heading > div > span {
+  color: #a61531;
+}
+
+.mig-home-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mig-home-guide-card {
+  overflow: hidden;
+  border: 1px solid #eddee0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 20px rgba(67, 25, 36, 0.06);
+  animation: migGuideArrive 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.mig-home-guide-card:nth-child(2) { animation-delay: 80ms; }
+.mig-home-guide-card:nth-child(3) { animation-delay: 160ms; }
+
+.mig-home-guide-card:hover {
+  transform: translateY(-5px) rotate(0.35deg);
+  border-color: #e6aeb8;
+  box-shadow: 0 16px 28px rgba(67, 25, 36, 0.13);
+}
+
+.mig-home-guide-card figure {
+  position: relative;
+  height: 150px;
+  margin: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #7d091b, #b3122b 55%, #e58b50);
+}
+
+.mig-home-guide-card figure::after {
+  position: absolute;
+  inset: 25% 0 0;
+  background: linear-gradient(transparent, rgba(31, 12, 18, 0.72));
+  content: '';
+}
+
+.mig-home-guide-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 560ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mig-home-guide-card:hover img {
+  transform: scale(1.08);
+}
+
+.mig-home-guide-card figcaption {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  bottom: 11px;
+  display: grid;
+  width: 33px;
+  height: 33px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 11px;
+  background: rgba(73, 14, 29, 0.76);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 850;
+  backdrop-filter: blur(8px);
+}
+
+.mig-home-guide-card > div {
+  padding: 16px;
+}
+
+.mig-home-guide-card > div > span {
+  color: #a61531;
+  font-size: 0.63rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.mig-home-guide-card h3 {
+  margin: 5px 0;
+  color: #24181a;
+  font-size: 0.97rem;
+}
+
+.mig-home-guide-card p {
+  margin: 0;
+  color: #6b5b5e;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+@keyframes migGuideArrive {
+  from { opacity: 0; transform: translateY(17px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 760px) {
+  .mig-home-guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mig-home-guide-card figure {
+    height: 190px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mig-home-guide,
+  .mig-home-guide-card,
+  .mig-home-guide-card img {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -46,6 +46,27 @@ const SERVICIOS = [
   },
 ];
 
+const PASOS_PORTAL = [
+  {
+    numero: '01',
+    titulo: 'Elige tu espacio',
+    descripcion:
+      'Abre el módulo que necesitas; los accesos disponibles dependen de tu rol.',
+  },
+  {
+    numero: '02',
+    titulo: 'Haz tu gestión',
+    descripcion:
+      'Registra solicitudes, revisa cotizaciones o consulta tus citas desde cada servicio.',
+  },
+  {
+    numero: '03',
+    titulo: 'Sigue el avance',
+    descripcion:
+      'Vuelve cuando quieras para revisar el estado de tus trámites y operaciones.',
+  },
+];
+
 export default function Inicio() {
   const { usuario, rolDe } = useAuth();
   const serviciosDisponibles = SERVICIOS.filter(({ modulo }) => rolDe(modulo));
@@ -144,6 +165,38 @@ export default function Inicio() {
           del sistema.
         </div>
       )}
+
+      <section className="portal-home-guide" aria-labelledby="portal-guide-title">
+        <figure className="portal-home-guide-photo">
+          <img
+            src={SERVICIOS[0].imagen}
+            alt="Paisaje andino de Junín"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+          />
+          <figcaption>Junín · tu espacio digital</figcaption>
+        </figure>
+        <div className="portal-home-guide-content">
+          <span className="portal-home-guide-kicker">TU RUTA, EN TRES PASOS</span>
+          <h2 id="portal-guide-title">Todo empieza con una buena ruta.</h2>
+          <p>
+            Un solo acceso para organizar tus gestiones. Elige un servicio y
+            continúa desde donde lo dejaste.
+          </p>
+          <div className="portal-home-guide-steps">
+            {PASOS_PORTAL.map((paso) => (
+              <article key={paso.numero}>
+                <span>{paso.numero}</span>
+                <div>
+                  <h3>{paso.titulo}</h3>
+                  <p>{paso.descripcion}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <footer className="portal-home-note">
         <span className="portal-home-note-icon" aria-hidden="true">i</span>

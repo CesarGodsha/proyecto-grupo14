@@ -64,6 +64,33 @@ const LOG_PERSONAL_CAROUSEL_SLIDES = LOG_CAROUSEL_SLIDES.map(
   })
 );
 
+const LOG_GUIDE = [
+  {
+    numero: '01',
+    etiqueta: 'PLANIFICA',
+    titulo: 'Cotiza con detalle',
+    descripcion:
+      'Define ruta, tipo de carga, tonelaje y si requiere manejo MATPEL.',
+    imagen: LOG_CAROUSEL_SLIDES[0],
+  },
+  {
+    numero: '02',
+    etiqueta: 'CONECTA',
+    titulo: 'Vincula tus gestiones',
+    descripcion:
+      'Asocia expedientes GORE y citas migratorias cuando tu operación lo requiera.',
+    imagen: LOG_CAROUSEL_SLIDES[1],
+  },
+  {
+    numero: '03',
+    etiqueta: 'DALE SEGUIMIENTO',
+    titulo: 'Controla cada etapa',
+    descripcion:
+      'Consulta estados, permisos y datos de tus operaciones en un solo lugar.',
+    imagen: LOG_CAROUSEL_SLIDES[2],
+  },
+];
+
 function formatoSoles(valor) {
   return new Intl.NumberFormat('es-PE', {
     style: 'currency',
@@ -255,6 +282,41 @@ export default function Inicio() {
           <div><span>3</span><strong>Control migratorio</strong><small>Asocia una cita, si aplica</small></div>
           <i aria-hidden="true">→</i>
           <div><span>4</span><strong>Seguimiento</strong><small>Consulta el estado</small></div>
+        </div>
+      </section>
+
+      <section className="log-home-guide" aria-labelledby="log-guide-title">
+        <div className="log-home-guide-heading">
+          <div>
+            <span>OPERACIONES CONECTADAS</span>
+            <h2 id="log-guide-title">Una ruta clara para cada envío</h2>
+          </div>
+          <p>
+            Desde la primera cotización hasta el último estado, mantén tu carga
+            bajo control.
+          </p>
+        </div>
+        <div className="log-home-guide-grid">
+          {LOG_GUIDE.map((paso) => (
+            <article className="log-home-guide-card" key={paso.numero}>
+              <figure>
+                <img
+                  src={paso.imagen.image}
+                  alt={paso.imagen.alt}
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                />
+                <figcaption>
+                  <span>{paso.numero}</span> {paso.etiqueta}
+                </figcaption>
+              </figure>
+              <div>
+                <h3>{paso.titulo}</h3>
+                <p>{paso.descripcion}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 

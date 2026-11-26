@@ -27,6 +27,39 @@ const SERVICIOS_BASE = [
   },
 ];
 
+const RUTA_ATENCION = [
+  {
+    numero: '01',
+    titulo: 'Prepara tu solicitud',
+    descripcion:
+      'Ten a mano el asunto y el documento que quieres presentar.',
+    imagen:
+      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80',
+    alt: 'Documentos para preparar una solicitud',
+    ruta: '/gore/registro',
+  },
+  {
+    numero: '02',
+    titulo: 'Regístrala en línea',
+    descripcion:
+      'Completa el formulario para guardar tu expediente en el sistema.',
+    imagen:
+      'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80',
+    alt: 'Persona completando una gestión en línea',
+    ruta: '/gore/registro',
+  },
+  {
+    numero: '03',
+    titulo: 'Consulta el avance',
+    descripcion:
+      'Revisa el estado de tus expedientes desde el módulo de seguimiento.',
+    imagen:
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+    alt: 'Panel digital para consultar información',
+    ruta: '/gore/consulta',
+  },
+];
+
 export default function InicioGore() {
   const { usuario, rolDe } = useAuth();
   const rolGore = rolDe('gore') || 'cliente';
@@ -132,6 +165,41 @@ export default function InicioGore() {
                 </span>
               </div>
             </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="gore-home-guide" aria-labelledby="gore-guide-title">
+        <header className="gore-home-guide-heading">
+          <div>
+            <span>GUÍA RÁPIDA · MESA DE PARTES</span>
+            <h2 id="gore-guide-title">Tu expediente, paso a paso</h2>
+            <p>Una ruta sencilla para registrar y consultar tus solicitudes.</p>
+          </div>
+          <span className="gore-home-guide-stamp" aria-hidden="true">GJ ✦</span>
+        </header>
+        <div className="gore-home-guide-grid">
+          {RUTA_ATENCION.map((paso) => (
+            <article className="gore-home-guide-card" key={paso.numero}>
+              <figure className="gore-home-guide-photo">
+                <img
+                  src={paso.imagen}
+                  alt={paso.alt}
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                />
+                <figcaption>{paso.numero}</figcaption>
+              </figure>
+              <div>
+                <span>ETAPA {paso.numero}</span>
+                <h3>{paso.titulo}</h3>
+                <p>{paso.descripcion}</p>
+                <Link to={paso.ruta}>
+                  Ir a este paso <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       </section>

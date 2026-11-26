@@ -106,6 +106,54 @@ const MIG_PERSONAL_CAROUSEL_SLIDES = MIG_CAROUSEL_SLIDES.map(
   })
 );
 
+const MIG_GUIA_CLIENTE = [
+  {
+    numero: '01',
+    titulo: 'Define qué necesitas',
+    descripcion:
+      'Elige el trámite que quieres consultar o registrar en este módulo.',
+    imagen: TRAMITES[0],
+  },
+  {
+    numero: '02',
+    titulo: 'Revisa la información oficial',
+    descripcion:
+      'Confirma requisitos, costos y disponibilidad en los canales de Migraciones.',
+    imagen: TRAMITES[1],
+  },
+  {
+    numero: '03',
+    titulo: 'Guarda tu seguimiento',
+    descripcion:
+      'Consulta el estado de las citas que registraste en el portal del proyecto.',
+    imagen: TRAMITES[2],
+  },
+];
+
+const MIG_GUIA_PERSONAL = [
+  {
+    numero: '01',
+    titulo: 'Recibe solicitudes',
+    descripcion:
+      'Encuentra los registros enviados al módulo desde la bandeja de atención.',
+    imagen: TRAMITES[0],
+  },
+  {
+    numero: '02',
+    titulo: 'Revisa los detalles',
+    descripcion:
+      'Comprueba la información y los datos de cada cita antes de atenderla.',
+    imagen: TRAMITES[1],
+  },
+  {
+    numero: '03',
+    titulo: 'Actualiza el estado',
+    descripcion:
+      'Mantén el seguimiento al día para que cada persona vea el avance.',
+    imagen: TRAMITES[2],
+  },
+];
+
 export default function InicioMigraciones() {
   const { usuario, rolDe } = useAuth();
   const rol = rolDe('migraciones');
@@ -124,6 +172,7 @@ export default function InicioMigraciones() {
     : esPersonal
       ? MIG_PERSONAL_CAROUSEL_SLIDES
       : [];
+  const pasos = esPersonal ? MIG_GUIA_PERSONAL : MIG_GUIA_CLIENTE;
 
   return (
     <div className="mig mig-home">
@@ -207,6 +256,43 @@ export default function InicioMigraciones() {
             slides={slides}
           />
         )}
+
+        <section className="mig-home-guide" aria-labelledby="mig-home-guide-title">
+          <div className="mig-home-section-heading">
+            <div>
+              <span>{esPersonal ? 'HERRAMIENTAS DEL EQUIPO' : 'ANTES DE EMPEZAR'}</span>
+              <h2 id="mig-home-guide-title">
+                {esPersonal ? 'Tu ruta de atención' : 'Tu viaje empieza con información clara'}
+              </h2>
+            </div>
+            {!esPersonal && (
+              <a href="https://www.gob.pe/migraciones" target="_blank" rel="noreferrer">
+                Requisitos oficiales <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+          <div className="mig-home-guide-grid">
+            {pasos.map((paso) => (
+              <article className="mig-home-guide-card" key={paso.numero}>
+                <figure>
+                  <img
+                    src={paso.imagen.imagen}
+                    alt={paso.imagen.altImagen}
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                  />
+                  <figcaption>{paso.numero}</figcaption>
+                </figure>
+                <div>
+                  <span>PASO {paso.numero}</span>
+                  <h3>{paso.titulo}</h3>
+                  <p>{paso.descripcion}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
         {esCliente && (
           <section className="mig-home-section" aria-labelledby="mig-home-services">
