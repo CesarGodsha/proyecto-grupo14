@@ -1,0 +1,488 @@
+{
+  "info": {
+    "_postman_id": "f185dd33-2c95-43e8-b7d4-0469cf5b3590",
+    "name": "Grupo 14 - migraciones",
+    "description": "Coleccion Postman independiente para migraciones. Inicia sesion primero; el token se guarda en el entorno.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "01 - Autenticación",
+      "item": [
+        {
+          "name": "Login correcto (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/auth/login",
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200 y devuelve token y usuario', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.token).to.be.a('string').and.not.empty;",
+                  "  pm.expect(body.usuario).to.have.property('roles');",
+                  "  pm.environment.set('authToken', body.token);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login con clave incorrecta (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"clave-incorrecta\"\n}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/auth/login",
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Rechaza credenciales inválidas con 401', function () {",
+                  "  pm.response.to.have.status(401);",
+                  "  pm.expect(pm.response.json()).to.have.property('mensaje');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login sin datos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{authBaseUrl}}/auth/login",
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Valida campos requeridos con 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Migraciones e integración",
+      "item": [
+        {
+          "name": "Crear cita vinculada a cotización (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tramite\": \"Pasaporte\",\n  \"fecha\": \"2030-01-15\",\n  \"hora\": \"09:30\",\n  \"id_cotizacion\": {{cotizacionId}}\n}"
+            },
+            "url": {
+              "raw": "{{moduleBaseUrl}}/migraciones/citas",
+              "host": [
+                "{{moduleBaseUrl}}"
+              ],
+              "path": [
+                "migraciones",
+                "citas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Crea una cita vinculada y devuelve código (201)', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.codigo).to.match(/^MIG-/);",
+                  "  pm.environment.set('citaId', body.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar mis citas (200)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{moduleBaseUrl}}/migraciones/citas/mias",
+              "host": [
+                "{{moduleBaseUrl}}"
+              ],
+              "path": [
+                "migraciones",
+                "citas",
+                "mias"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Devuelve mis citas (200)', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Estado de integración de base de datos (200)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{authBaseUrl}}/integraciones",
+              "host": [
+                "{{authBaseUrl}}"
+              ],
+              "path": [
+                "integraciones"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Devuelve el estado de los módulos integrados (200)', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.json()).to.have.property('estado', 'conectado');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 - Personal (requiere cuenta empleado)",
+          "description": "Configura staffEmail y staffPassword con una cuenta que tenga rol empleado o administrador en los módulos correspondientes. Ejecuta después de las carpetas 01 a 04.",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{staffToken}}",
+                "type": "string"
+              }
+            ]
+          },
+          "item": [
+            {
+              "name": "Login de personal",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{staffPassword}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{authBaseUrl}}/auth/login",
+                  "host": [
+                    "{{authBaseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "auth": {
+                  "type": "noauth"
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Inicia sesión la cuenta de personal', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "  pm.environment.set('staffToken', pm.response.json().token);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Bandeja Migraciones (200)",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{moduleBaseUrl}}/migraciones/citas",
+                  "host": [
+                    "{{moduleBaseUrl}}"
+                  ],
+                  "path": [
+                    "migraciones",
+                    "citas"
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Personal de migraciones consulta la bandeja', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "  pm.expect(pm.response.json()).to.be.an('array');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Confirmar cita (200)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estado\": \"confirmada\"\n}"
+                },
+                "url": {
+                  "raw": "{{moduleBaseUrl}}/migraciones/citas/{{citaId}}/estado",
+                  "host": [
+                    "{{moduleBaseUrl}}"
+                  ],
+                  "path": [
+                    "migraciones",
+                    "citas",
+                    "{{citaId}}",
+                    "estado"
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Personal puede confirmar una cita', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "06 - Administración (requiere cuenta administrador)",
+          "description": "Configura adminEmail y adminPassword con una cuenta administradora. Elimina solo los registros creados durante esta colección.",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{adminToken}}",
+                "type": "string"
+              }
+            ]
+          },
+          "item": [
+            {
+              "name": "Login de administrador",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{authBaseUrl}}/auth/login",
+                  "host": [
+                    "{{authBaseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "auth": {
+                  "type": "noauth"
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Inicia sesión la cuenta administradora', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "  pm.environment.set('adminToken', pm.response.json().token);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Eliminar cita de prueba (200)",
+              "request": {
+                "method": "DELETE",
+                "url": {
+                  "raw": "{{moduleBaseUrl}}/migraciones/citas/{{citaId}}",
+                  "host": [
+                    "{{moduleBaseUrl}}"
+                  ],
+                  "path": [
+                    "migraciones",
+                    "citas",
+                    "{{citaId}}"
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Administrador elimina la cita creada por la prueba', function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    }
+  ]
+}

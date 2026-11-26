@@ -1,0 +1,52 @@
+envVarGroups:
+  - name: grupo14-shared
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+
+services:
+  - type: web
+    name: grupo14-auth-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix shared/backend && npm ci --prefix portal/backend
+    startCommand: node portal/backend/server.js
+    healthCheckPath: /api/salud
+    envVars:
+      - fromGroup: grupo14-shared
+
+  - type: web
+    name: grupo14-gore-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix shared/backend && npm ci --prefix apps/gore-app/backend
+    startCommand: node apps/gore-app/backend/server.js
+    healthCheckPath: /api/salud
+    envVars:
+      - fromGroup: grupo14-shared
+
+  - type: web
+    name: grupo14-logistica-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix shared/backend && npm ci --prefix apps/logistica-app/backend
+    startCommand: node apps/logistica-app/backend/server.js
+    healthCheckPath: /api/salud
+    envVars:
+      - fromGroup: grupo14-shared
+
+  - type: web
+    name: grupo14-migraciones-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix shared/backend && npm ci --prefix apps/migraciones-app/backend
+    startCommand: node apps/migraciones-app/backend/server.js
+    healthCheckPath: /api/salud
+    envVars:
+      - fromGroup: grupo14-shared
