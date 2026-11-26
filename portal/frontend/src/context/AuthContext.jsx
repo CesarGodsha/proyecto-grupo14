@@ -43,6 +43,9 @@ export function AuthProvider({ children, session }) {
 
   const login = useCallback(async (email, password) => {
     const data = await iniciarSesion(email, password);
+    if (!data?.token || !data?.usuario) {
+      throw new Error('El servidor no confirmó el inicio de sesión');
+    }
     localStorage.setItem('token', data.token);
     localStorage.setItem('usuario', JSON.stringify(data.usuario));
     setApiToken(data.token);

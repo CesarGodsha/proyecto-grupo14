@@ -8,6 +8,7 @@ import './logistica.css';
 const RUTAS_FRECUENTES = [
   'Huancayo → Puerto del Callao',
   'Huancayo → Puerto de Arica (Chile)',
+  'Huancayo → Puerto de Iquique (Chile)',
   'La Oroya → Puerto de Matarani',
   'Tarma → Lima (Terminal Terrestre)',
 ];

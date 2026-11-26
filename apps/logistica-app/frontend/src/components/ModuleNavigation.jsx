@@ -20,9 +20,13 @@ export default function ModuleNavigation() {
       </NavLink>
       <div className="module-nav-links">
         <NavLink to="/logistica" end>Inicio</NavLink>
-        {esCliente && <NavLink to="/logistica/registro">Cotizar</NavLink>}
-        {esCliente && <NavLink to="/logistica/consulta">Mis operaciones</NavLink>}
-        {esPersonal && <NavLink to="/logistica/panel">Panel operativo</NavLink>}
+        {esCliente && <NavLink to="/logistica/registro">Nueva Cotización</NavLink>}
+        {(esCliente || esPersonal) && (
+          <NavLink to="/logistica/consulta">Seguimiento y Flota</NavLink>
+        )}
+        {esPersonal && (
+          <NavLink to="/logistica/panel">Panel Operativo</NavLink>
+        )}
       </div>
     </nav>
   );

@@ -4,6 +4,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ModuleAuthBridge from './components/ModuleAuthBridge.jsx';
 import GoreLayout from './components/GoreLayout.jsx';
 import { useAuth } from './context/AuthContext.jsx';
+import FondoRedNeuronalAzul from './modulos/gore/FondoRedNeuronalAzul.jsx';
 import InicioGore from './modulos/gore/InicioGore.jsx';
 import {
   ConsultaGorePage,
@@ -12,6 +13,8 @@ import {
 } from './modulos/gore/PaginasGore.jsx';
 import './styles/index.css';
 import './styles/design-system.css';
+import './modulos/gore/gore.css';
+import './styles/visual-theme.css';
 
 function RutaPersonalGore({ children }) {
   const { rolDe } = useAuth();
@@ -23,6 +26,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ModuleAuthBridge>
       <HashRouter>
+        <FondoRedNeuronalAzul />
         <Routes>
           <Route path="/gore" element={<GoreLayout />}>
             <Route index element={<InicioGore />} />

@@ -21,17 +21,24 @@ export async function register({ nombre, email, password }) {
   }
 
   const hash = await bcrypt.hash(clave, 10);
-  const nuevoUsuario = await authRepo.crearUsuarioConRoles({
-    nombre: nombreNormalizado,
-    email: emailNormalizado,
-    passwordHash: hash,
-  });
-
-  if (!nuevoUsuario) {
-    throw new AppError(409, 'Ese correo ya está registrado');
+  let nuevoUsuario;
+  try {
+    nuevoUsuario = await authRepo.crearUsuarioConRoles({
+      nombre: nombreNormalizado,
+      email: emailNormalizado,
+      passwordHash: hash,
+    });
+  } catch (error) {
+    if (error.code === '23505') {
+      throw new AppError(400, error.message);
+    }
+    if (typeof error.code === 'string') {
+      error.expose = true;
+    }
+    throw error;
   }
 
-  return { mensaje: 'Usuario creado' };
+  return { mensaje: 'Usuario creado', usuario: nuevoUsuario };
 }
 
 export async function login({ email, password }) {

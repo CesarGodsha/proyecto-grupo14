@@ -138,7 +138,7 @@ export default function PanelAdmin() {
               onClick={cargarCitas}
               disabled={cargando || ocupadoId !== null}
             >
-              Actualizar lista
+              {ocupadoId !== null ? 'Procesando…' : cargando ? 'Actualizando…' : 'Actualizar lista'}
             </button>
           </div>
 
@@ -195,7 +195,7 @@ export default function PanelAdmin() {
                               disabled={estaOcupado}
                               onClick={() => cambiarEstado(idCita, 'confirmada')}
                             >
-                              Confirmar
+                              {estaOcupado ? 'Procesando…' : 'Confirmar'}
                             </button>
                             <button
                               type="button"
@@ -203,7 +203,7 @@ export default function PanelAdmin() {
                               disabled={estaOcupado}
                               onClick={() => cambiarEstado(idCita, 'rechazado')}
                             >
-                              Rechazar
+                              {estaOcupado ? 'Procesando…' : 'Rechazar'}
                             </button>
                             {esAdmin && (
                               <button
@@ -212,7 +212,7 @@ export default function PanelAdmin() {
                                 disabled={estaOcupado}
                                 onClick={() => eliminarCita(idCita)}
                               >
-                                Eliminar
+                                {estaOcupado ? 'Procesando…' : 'Eliminar'}
                               </button>
                             )}
                           </div>

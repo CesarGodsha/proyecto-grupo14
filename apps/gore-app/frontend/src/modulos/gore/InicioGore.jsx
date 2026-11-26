@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IconoGore from '../../components/IconoGore.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -59,6 +60,56 @@ const RUTA_ATENCION = [
     ruta: '/gore/consulta',
   },
 ];
+
+const NOTICIAS_REGIONALES = [
+  {
+    categoria: 'Territorio',
+    titulo: 'Conoce las rutas y paisajes de Junín',
+    descripcion: 'Explora información regional y los servicios disponibles en el portal institucional.',
+    imagen:
+      'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=800&q=85',
+    alt: 'Paisaje andino de referencia para la región Junín',
+  },
+  {
+    categoria: 'Ciudadanía',
+    titulo: 'Novedades y atención regional',
+    descripcion: 'Consulta avisos, actividades y canales de atención publicados por el GORE Junín.',
+    imagen:
+      'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=85',
+    alt: 'Persona revisando información en línea',
+  },
+  {
+    categoria: 'Desarrollo',
+    titulo: 'Información oficial en un solo lugar',
+    descripcion: 'Revisa las publicaciones y novedades institucionales directamente en su fuente oficial.',
+    imagen:
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=85',
+    alt: 'Edificios urbanos bajo el cielo',
+  },
+];
+
+function ContadorAnimado({ valor }) {
+  const [numero, setNumero] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setNumero(valor);
+      return undefined;
+    }
+
+    let frameId = 0;
+    const inicio = performance.now();
+    const animar = (ahora) => {
+      const progreso = Math.min((ahora - inicio) / 650, 1);
+      setNumero(Math.round(valor * progreso));
+      if (progreso < 1) frameId = window.requestAnimationFrame(animar);
+    };
+    frameId = window.requestAnimationFrame(animar);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [valor]);
+
+  return <strong>{numero}</strong>;
+}
 
 export default function InicioGore() {
   const { usuario, rolDe } = useAuth();
@@ -169,6 +220,17 @@ export default function InicioGore() {
         </div>
       </section>
 
+      <section className="gore-home-metrics" aria-label="Resumen de servicios">
+        <article className="gore-home-metric">
+          <ContadorAnimado valor={servicios.length} />
+          <span>servicios disponibles para tu rol</span>
+        </article>
+        <article className="gore-home-metric">
+          <ContadorAnimado valor={RUTA_ATENCION.length} />
+          <span>pasos para completar tu gestión</span>
+        </article>
+      </section>
+
       <section className="gore-home-guide" aria-labelledby="gore-guide-title">
         <header className="gore-home-guide-heading">
           <div>
@@ -200,6 +262,37 @@ export default function InicioGore() {
                 </Link>
               </div>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="gore-home-news" aria-labelledby="gore-news-title">
+        <header className="gore-home-section-heading">
+          <div>
+            <span>ACTUALIDAD REGIONAL</span>
+            <h2 id="gore-news-title">Explora Junín y sus servicios</h2>
+            <p>Contenido ilustrativo; consulta avisos y noticias en el canal oficial.</p>
+          </div>
+          <a href="https://www.regionjunin.gob.pe/" target="_blank" rel="noreferrer">
+            Ver portal oficial <span aria-hidden="true">↗</span>
+          </a>
+        </header>
+        <div className="gore-news-grid">
+          {NOTICIAS_REGIONALES.map((noticia) => (
+            <a
+              className="gore-news-card"
+              href="https://www.regionjunin.gob.pe/"
+              target="_blank"
+              rel="noreferrer"
+              key={noticia.titulo}
+            >
+              <img src={noticia.imagen} alt={noticia.alt} loading="lazy" decoding="async" />
+              <div>
+                <span>{noticia.categoria}</span>
+                <h3>{noticia.titulo}</h3>
+                <p>{noticia.descripcion}</p>
+              </div>
+            </a>
           ))}
         </div>
       </section>

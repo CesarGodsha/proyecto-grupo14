@@ -5,13 +5,9 @@ export async function crearUsuarioConRoles({ nombre, email, passwordHash }) {
   try {
     await client.query('BEGIN');
     const { rows } = await client.query(
-      'INSERT INTO usuarios (nombre, email, password_hash) VALUES ($1,$2,$3) ON CONFLICT (email) DO NOTHING RETURNING id',
+      'INSERT INTO usuarios (nombre, email, password_hash) VALUES ($1,$2,$3) RETURNING id, nombre, email',
       [nombre, email, passwordHash]
     );
-    if (!rows[0]) {
-      await client.query('ROLLBACK');
-      return null;
-    }
 
     await client.query(
       `INSERT INTO usuario_rol (id_usuario, modulo, rol)
@@ -22,7 +18,11 @@ export async function crearUsuarioConRoles({ nombre, email, passwordHash }) {
     await client.query('COMMIT');
     return rows[0];
   } catch (error) {
-    await client.query('ROLLBACK');
+    try {
+      await client.query('ROLLBACK');
+    } catch (rollbackError) {
+      console.error('No se pudo revertir la transacción de registro:', rollbackError);
+    }
     throw error;
   } finally {
     client.release();

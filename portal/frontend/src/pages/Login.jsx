@@ -58,6 +58,9 @@ export default function Login() {
         email: correoLimpio,
         password: passwordCliente,
       });
+      if (!data.usuario?.id) {
+        throw new Error('El servidor no confirmó el registro en la base de datos');
+      }
 
       setMensajeRegistro(
         data.mensaje ||
@@ -70,7 +73,12 @@ export default function Login() {
       setPasswordCliente('');
       setModo('login');
     } catch (err) {
-      setErrorRegistro(mensajeDeError(err));
+      setErrorRegistro(
+        err.response?.data?.mensaje ||
+          err.response?.data?.error ||
+          err.message ||
+          mensajeDeError(err)
+      );
     } finally {
       setRegistrando(false);
     }

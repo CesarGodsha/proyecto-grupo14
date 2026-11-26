@@ -129,7 +129,10 @@ export default function Inicio() {
                 : servicio.accion;
 
             return (
-              <article className="portal-service-card" key={servicio.modulo}>
+              <article
+                className={`portal-service-card portal-service-card-${servicio.modulo}`}
+                key={servicio.modulo}
+              >
                 <figure className="theme-photo portal-service-photo">
                   <img
                     src={servicio.imagen}

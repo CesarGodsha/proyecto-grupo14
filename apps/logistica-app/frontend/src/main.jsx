@@ -9,14 +9,17 @@ import RegistroCarga from './modulos/logistica/RegistroCarga.jsx';
 import ActualizarCarga from './modulos/logistica/ActualizarCarga.jsx';
 import PanelLogistica from './modulos/logistica/PanelLogistica.jsx';
 import Inicio from './modulos/logistica/Inicio.jsx';
+import FondoRutasGpsLogistica from './modulos/logistica/FondoRutasGpsLogistica.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import './styles/design-system.css';
+import './styles/visual-theme.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ModuleAuthBridge>
       <HashRouter>
+        <FondoRutasGpsLogistica />
         <ModuleNavigation />
         <Routes>
           <Route path="/logistica" element={<Inicio />} />
@@ -31,7 +34,7 @@ createRoot(document.getElementById('root')).render(
           <Route
             path="/logistica/consulta"
             element={
-              <RutaProtegida modulo="logistica" roles={['cliente']}>
+              <RutaProtegida modulo="logistica" roles={['cliente', 'administrador', 'empleado']}>
                 <ConsultaCarga />
               </RutaProtegida>
             }

@@ -1,0 +1,622 @@
+:root {
+  --brand-navy: #091124;
+  --brand-green: #1d4ed8;
+  --brand-green-dark: #1e40af;
+  --page-bg: #091124;
+  --surface: rgba(15, 29, 55, 0.88);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --border-soft: rgba(148, 193, 230, 0.22);
+}
+
+body:has(.gore-wrapper),
+body:has(.gore-wrapper) #root {
+  min-height: 100vh;
+  color: #f8fafc !important;
+  background: #091124 !important;
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgba(29, 78, 216, 0.28), transparent 40%),
+    radial-gradient(ellipse at 88% 90%, rgba(56, 189, 248, 0.12), transparent 36%) !important;
+}
+
+body:has(.gore-wrapper) .menu {
+  position: relative;
+  z-index: 5;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.23) !important;
+  background: rgba(9, 17, 36, 0.86) !important;
+  color: #f8fafc !important;
+  backdrop-filter: blur(16px);
+}
+
+body:has(.gore-wrapper) .module-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(9, 17, 36, 0.86) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  color: #f8fafc !important;
+  backdrop-filter: blur(14px);
+}
+
+body:has(.gore-wrapper) .module-nav-brand,
+body:has(.gore-wrapper) .module-nav-brand:hover,
+body:has(.gore-wrapper) .module-nav-brand strong {
+  color: #f8fafc !important;
+}
+
+body:has(.gore-wrapper) .module-nav-brand small {
+  color: #cbd5e1 !important;
+}
+
+body:has(.gore-wrapper) .module-nav-mark {
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  background: rgba(29, 78, 216, 0.2) !important;
+  color: #7dd3fc !important;
+}
+
+body:has(.gore-wrapper) .module-nav-links a {
+  border-color: transparent !important;
+  background: transparent !important;
+  color: #cbd5e1 !important;
+}
+
+body:has(.gore-wrapper) .module-nav-links a:hover,
+body:has(.gore-wrapper) .module-nav-links a.active,
+body:has(.gore-wrapper) .module-nav-links a[aria-current='page'] {
+  border-color: rgba(56, 189, 248, 0.2) !important;
+  background: rgba(29, 78, 216, 0.2) !important;
+  color: #bae6fd !important;
+}
+
+body:has(.gore-wrapper) .module-nav-mark {
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+body:has(.gore-wrapper) .menu .marca-menu {
+  color: #f8fafc !important;
+}
+
+body:has(.gore-wrapper) .menu a {
+  color: #cbd5e1 !important;
+}
+
+body:has(.gore-wrapper) .menu a:hover,
+body:has(.gore-wrapper) .menu a.active,
+body:has(.gore-wrapper) .menu a[aria-current='page'] {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  background: rgba(29, 78, 216, 0.28) !important;
+  color: #f8fafc !important;
+  text-shadow: 0 0 14px rgba(56, 189, 248, 0.42);
+}
+
+.gore-network-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.78;
+}
+
+.gore-wrapper,
+.gore-container {
+  min-height: calc(100vh - 60px);
+  padding: 28px clamp(16px, 3vw, 32px) 48px;
+  background: transparent !important;
+  color: #f8fafc !important;
+}
+
+.gore-wrapper::before,
+.gore-wrapper::after {
+  opacity: 0.35;
+  background: rgba(29, 78, 216, 0.28);
+}
+
+.gore-wrapper::after {
+  background: rgba(56, 189, 248, 0.17);
+}
+
+.gore-content {
+  max-width: 1220px;
+}
+
+.gore-site-bar,
+.gore-account-card,
+.gore-header,
+.gore-card,
+.gore-home-guide,
+.gore-home-official,
+.gore-info-card,
+.gore-official-note,
+.gore-disclaimer,
+.gore-page-heading,
+.gore-nav {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(15, 23, 42, 0.72) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+}
+
+.gore-site-bar {
+  border-radius: 14px;
+  padding: 12px 18px;
+}
+
+.gore-header {
+  background:
+    linear-gradient(110deg, rgba(9, 17, 36, 0.94), rgba(30, 58, 138, 0.68)),
+    url('https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=85') center 48% / cover !important;
+}
+
+.gore-site-bar a,
+.gore-home-official a,
+.gore-home-guide-card a {
+  color: #7dd3fc !important;
+}
+
+.gore-header {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background:
+    linear-gradient(110deg, rgba(9, 17, 36, 0.94), rgba(29, 78, 216, 0.72)),
+    url('https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=85') center 48% / cover !important;
+}
+
+.gore-header h1,
+.gore-header h2,
+.gore-card h3 {
+  background: none !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+.gore-kicker,
+.gore-home-eyebrow,
+.gore-home-section-heading > div > span,
+.gore-home-guide-heading > div > span {
+  color: #7dd3fc !important;
+}
+
+.gore-subtitle,
+.gore-home p,
+.gore-home-guide-card p,
+.gore-home-official p {
+  color: #cbd5e1 !important;
+}
+
+.gore-rol-pill {
+  border-color: rgba(125, 211, 252, 0.4) !important;
+  background: rgba(29, 78, 216, 0.24) !important;
+  color: #bae6fd !important;
+}
+
+.gore-rol-pill::before {
+  background: #38bdf8 !important;
+  box-shadow: 0 0 10px #38bdf8 !important;
+}
+
+.gore-tab {
+  border-color: rgba(125, 211, 252, 0.23) !important;
+  background: rgba(15, 29, 55, 0.78) !important;
+  color: #cbd5e1 !important;
+}
+
+.gore-tab:hover,
+.gore-tab.active {
+  border-color: #38bdf8 !important;
+  background: linear-gradient(135deg, #1d4ed8, #0e7490) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 28px rgba(29, 78, 216, 0.3) !important;
+}
+
+.gore-home-hero {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important;
+  background:
+    linear-gradient(110deg, rgba(9, 17, 36, 0.97) 0%, rgba(9, 17, 36, 0.86) 53%, rgba(9, 17, 36, 0.22) 100%),
+    url('https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=85') center 52% / cover !important;
+  box-shadow: 0 24px 60px rgba(1, 6, 18, 0.42);
+}
+
+.gore-home-hero h2,
+.gore-home-section-heading h2,
+.gore-home-guide-heading h2 {
+  color: #f8fafc !important;
+}
+
+.gore-link-button,
+.gore-btn-primary {
+  background: linear-gradient(120deg, #1d4ed8, #0284c7) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(29, 78, 216, 0.3) !important;
+}
+
+.gore-link-secondary {
+  border-color: rgba(125, 211, 252, 0.42) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #e0f2fe !important;
+}
+
+.gore-link-secondary:hover {
+  border-color: rgba(56, 189, 248, 0.32) !important;
+  background: rgba(29, 78, 216, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+.gore-link-button:hover {
+  background: linear-gradient(120deg, #1e40af, #0369a1) !important;
+  color: #fff !important;
+}
+
+.gore-home-role,
+.gore-intro-badge {
+  border: 1px solid rgba(56, 189, 248, 0.18) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  color: #bae6fd !important;
+}
+
+.gore-home-session-icon,
+.gore-home-official-mark,
+.gore-home-card-icon,
+.gore-card-heading-icon {
+  border-color: rgba(56, 189, 248, 0.18) !important;
+  background: rgba(29, 78, 216, 0.2) !important;
+  color: #7dd3fc !important;
+}
+
+.gore-info-label,
+.gore-page-heading > span,
+.gore-page-intro > div:first-child > span,
+.gore-card-kicker {
+  color: #38bdf8 !important;
+}
+
+.gore-page-heading h1,
+.gore-page-heading h2,
+.gore-page-heading h3,
+.gore-page-heading h4,
+.gore-info-card h1,
+.gore-info-card h2,
+.gore-info-card h3,
+.gore-info-card h4,
+.gore-official-note h1,
+.gore-official-note h2,
+.gore-official-note h3,
+.gore-official-note h4,
+.gore-disclaimer h1,
+.gore-disclaimer h2,
+.gore-disclaimer h3,
+.gore-disclaimer h4 {
+  color: #f8fafc !important;
+}
+
+.gore-info-card p,
+.gore-info-card strong,
+.gore-official-note p,
+.gore-disclaimer,
+.gore-page-heading p,
+.gore-page-intro p {
+  color: #cbd5e1 !important;
+}
+
+.gore-form-error,
+.gore-wrapper .alert {
+  border-color: rgba(248, 113, 113, 0.24) !important;
+  background: rgba(127, 29, 29, 0.28) !important;
+  color: #fecaca !important;
+}
+
+.gore-wrapper .error {
+  color: #fecaca !important;
+}
+
+.gore-field label,
+.gore-field small {
+  color: #cbd5e1 !important;
+}
+
+.gore-wrapper .estado {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #cbd5e1 !important;
+}
+
+.gore-wrapper .estado.verde {
+  border-color: rgba(134, 239, 172, 0.2);
+  background: rgba(34, 197, 94, 0.12) !important;
+  color: #bbf7d0 !important;
+}
+
+.gore-wrapper .estado.rojo {
+  border-color: rgba(248, 113, 113, 0.2);
+  background: rgba(185, 28, 28, 0.16) !important;
+  color: #fecaca !important;
+}
+
+.gore-wrapper .estado.azul {
+  border-color: rgba(56, 189, 248, 0.2);
+  background: rgba(29, 78, 216, 0.16) !important;
+  color: #bfdbfe !important;
+}
+
+.gore-wrapper table,
+.gore-wrapper table thead,
+.gore-wrapper table tbody,
+.gore-wrapper table tr,
+.gore-wrapper table th,
+.gore-wrapper table td {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+.gore-wrapper table th,
+.gore-wrapper table td {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  vertical-align: middle !important;
+}
+
+.gore-wrapper table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.gore-wrapper h1,
+.gore-wrapper h2,
+.gore-wrapper h3,
+.gore-wrapper h4 {
+  color: #f8fafc !important;
+}
+
+body:has(.gore-wrapper) .menu-compacta > button:hover:not(:disabled) {
+  border-color: rgba(56, 189, 248, 0.32) !important;
+  background: rgba(29, 78, 216, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+.gore-home-card,
+.gore-home-guide-card,
+.gore-home-metric,
+.gore-news-card {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px !important;
+  background: rgba(15, 23, 42, 0.72) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+}
+
+.gore-home-card:hover,
+.gore-home-guide-card:hover {
+  transform: translateY(-7px) perspective(900px) rotateX(1deg);
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 22px 48px rgba(1, 6, 18, 0.42), 0 0 25px rgba(56, 189, 248, 0.16);
+}
+
+.gore-home-card h3,
+.gore-home-guide-card h3 {
+  color: #f8fafc !important;
+}
+
+.gore-home-card-label,
+.gore-home-guide-card > div > span {
+  color: #7dd3fc !important;
+}
+
+.gore-home-card-link,
+.gore-home-section-heading > a {
+  color: #7dd3fc !important;
+}
+
+.gore-home-session strong {
+  color: #f8fafc !important;
+}
+
+.gore-home-session small {
+  color: #cbd5e1 !important;
+}
+
+.gore-home-card-photo img,
+.gore-home-guide-photo img {
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gore-home-card:hover .gore-home-card-photo img,
+.gore-home-guide-card:hover .gore-home-guide-photo img {
+  transform: scale(1.07);
+}
+
+.gore-home-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.gore-home-news {
+  margin-top: 30px;
+}
+
+.gore-home-news .gore-home-section-heading {
+  margin-bottom: 16px;
+}
+
+.gore-home-metric {
+  padding: 18px 20px;
+}
+
+.gore-home-metric strong {
+  display: block;
+  color: #7dd3fc;
+  font-size: 1.8rem;
+  line-height: 1.1;
+  animation: goreCountUp 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.gore-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.gore-news-card {
+  display: block;
+  text-decoration: none;
+}
+
+.gore-news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 38px rgba(1, 6, 18, 0.4), 0 0 22px rgba(56, 189, 248, 0.14);
+}
+
+.gore-news-card img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  transition: transform 520ms ease;
+}
+
+.gore-news-card:hover img {
+  transform: scale(1.06);
+}
+
+.gore-news-card div {
+  padding: 16px;
+}
+
+.gore-news-card span {
+  color: #7dd3fc;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.gore-news-card h3 {
+  margin: 7px 0;
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.gore-news-card p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.gore-table thead,
+.gore-table thead tr,
+.gore-table,
+.gore-table tbody,
+.gore-table tbody tr,
+.gore-table th,
+.gore-table td {
+  background: transparent !important;
+}
+
+.gore-table th,
+.gore-table td {
+  vertical-align: middle !important;
+}
+
+.gore-table thead th {
+  background: transparent !important;
+  color: #f8fafc !important;
+  border-color: rgba(56, 189, 248, 0.18) !important;
+}
+
+.gore-table tbody tr,
+.gore-table tbody td {
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+.gore-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+button:disabled,
+button[aria-disabled='true'] {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.gore-input,
+.gore-wrapper input,
+.gore-wrapper select,
+.gore-wrapper textarea {
+  color: #0f172a !important;
+  background-color: #f8fafc !important;
+}
+
+.gore-input::placeholder,
+.gore-wrapper input::placeholder,
+.gore-wrapper textarea::placeholder {
+  color: #64748b !important;
+}
+
+.gore-wrapper input:focus,
+.gore-wrapper select:focus,
+.gore-wrapper textarea:focus {
+  border-color: rgba(56, 189, 248, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14) !important;
+  outline: none !important;
+}
+
+.gore-wrapper input:focus-visible,
+.gore-wrapper select:focus-visible,
+.gore-wrapper textarea:focus-visible {
+  outline: none !important;
+}
+
+@keyframes goreCountUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 720px) {
+  .gore-home-metrics,
+  .gore-news-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gore-network-canvas {
+    opacity: 0.3;
+  }
+
+  .gore-home-card,
+  .gore-home-guide-card,
+  .gore-news-card,
+  .gore-news-card img,
+  .gore-home-metric strong {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+input,
+select,
+textarea {
+  color: #0f172a !important;
+  background-color: #f8fafc !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+}

@@ -8,6 +8,9 @@ export default function errorHandler(error, req, res, next) {
   if (status >= 500) console.error(error);
 
   res.status(status).json({
-    mensaje: status === 500 ? 'Error interno del servidor' : error.message,
+    mensaje:
+      status === 500 && error.expose !== true
+        ? 'Error interno del servidor'
+        : error.message,
   });
 }

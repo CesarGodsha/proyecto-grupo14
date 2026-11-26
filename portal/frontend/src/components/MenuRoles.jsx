@@ -5,10 +5,13 @@ export default function MenuRoles({ moduloActual }) {
   const { usuario, logout, rolDe } = useAuth();
 
   const rolLog = rolDe('logistica');
-  const esStaffLog = rolLog === 'administrador' || rolLog === 'empleado';
-
+  const rolGore = rolDe('gore');
   const rolMig = rolDe('migraciones');
-  const esStaffMig = rolMig === 'administrador' || rolMig === 'empleado';
+  const rolesUsuario = [
+    rolLog && `Logística: ${rolLog}`,
+    rolGore && `GORE: ${rolGore}`,
+    rolMig && `Migraciones: ${rolMig}`,
+  ].filter(Boolean).join(' · ');
 
   return (
     <nav className={`menu${moduloActual ? ' menu-compacta' : ''}`}>
@@ -19,22 +22,29 @@ export default function MenuRoles({ moduloActual }) {
         <>
           <NavLink to="/" end>Inicio</NavLink>
 
-          {rolLog && <NavLink to="/logistica">LogísticaMax</NavLink>}
-          {rolLog === 'cliente' && <NavLink to="/logistica/registro">Cotizar carga</NavLink>}
-          {rolLog === 'cliente' && <NavLink to="/logistica/consulta">Mis viajes</NavLink>}
-          {esStaffLog && <NavLink to="/logistica/panel">Operaciones <small>{rolLog}</small></NavLink>}
-
-          {rolDe('gore') && <NavLink to="/gore">GORE Junín <small>{rolDe('gore')}</small></NavLink>}
-
-          {rolMig && <NavLink to="/migraciones">Migraciones</NavLink>}
-          {rolMig === 'cliente' && <NavLink to="/migraciones/registro">Reservar cita</NavLink>}
-          {rolMig === 'cliente' && <NavLink to="/migraciones/consulta">Consulta</NavLink>}
-          {esStaffMig && <NavLink to="/migraciones/panel">Atención <small>{rolMig}</small></NavLink>}
+          {rolGore && (
+            <NavLink to="/gore">
+              GORE Junín <small className="portal-nav-role">{rolGore}</small>
+            </NavLink>
+          )}
+          {rolLog && (
+            <NavLink to="/logistica">
+              LogísticaMax <small className="portal-nav-role">{rolLog}</small>
+            </NavLink>
+          )}
+          {rolMig && (
+            <NavLink to="/migraciones">
+              Migraciones <small className="portal-nav-role">{rolMig}</small>
+            </NavLink>
+          )}
         </>
       )}
 
       <span className="espacio" />
-      <span>{usuario.nombre}</span>
+      <span className="menu-usuario">
+        <strong>{usuario.nombre}</strong>
+        <small>{rolesUsuario}</small>
+      </span>
       <button onClick={logout}>Salir</button>
     </nav>
   );

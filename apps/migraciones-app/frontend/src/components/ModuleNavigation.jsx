@@ -20,9 +20,15 @@ export default function ModuleNavigation() {
       </NavLink>
       <div className="module-nav-links">
         <NavLink to="/migraciones" end>Inicio</NavLink>
-        {esCliente && <NavLink to="/migraciones/registro">Solicitar cita</NavLink>}
-        {esCliente && <NavLink to="/migraciones/consulta">Consulta</NavLink>}
-        {esPersonal && <NavLink to="/migraciones/panel">Bandeja</NavLink>}
+        {esCliente && (
+          <NavLink to="/migraciones/registro">Solicitar Cita / Control</NavLink>
+        )}
+        {(esCliente || esPersonal) && (
+          <NavLink to="/migraciones/consulta">Consultar Citas</NavLink>
+        )}
+        {esPersonal && (
+          <NavLink to="/migraciones/panel">Bandeja Fronteriza</NavLink>
+        )}
       </div>
     </nav>
   );

@@ -118,6 +118,9 @@ export default function Inicio() {
     (total, cotizacion) => total + Number(cotizacion.monto_calculado || 0),
     0
   );
+  const porcentajeEnTransito = cotizaciones.length
+    ? Math.round((enTransito / cotizaciones.length) * 100)
+    : 0;
   const resumen = (valor) => (error ? '—' : cargando ? '…' : valor);
 
   return (
@@ -183,6 +186,29 @@ export default function Inicio() {
               Reintentar consulta
             </button>
           )}
+          <div className="log-home-progress">
+            <div className="log-home-progress-label">
+              <span>Operaciones en tránsito</span>
+              <span>
+                {error
+                  ? 'No disponible'
+                  : cargando
+                    ? 'Actualizando…'
+                    : `${enTransito} de ${cotizaciones.length}`}
+              </span>
+            </div>
+            <div
+              className="log-home-progress-track"
+              role="progressbar"
+              aria-label="Porcentaje de operaciones en tránsito"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow={error || cargando ? 0 : porcentajeEnTransito}
+              style={{ '--progress': `${porcentajeEnTransito}%` }}
+            >
+              <span />
+            </div>
+          </div>
         </div>
       </section>
 

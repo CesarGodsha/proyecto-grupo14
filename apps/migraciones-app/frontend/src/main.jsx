@@ -4,6 +4,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ModuleAuthBridge from './components/ModuleAuthBridge.jsx';
 import RutaProtegida from './components/RutaProtegida.jsx';
 import ModuleNavigation from './components/ModuleNavigation.jsx';
+import FondoLluviaEscaneoRojo from './modulos/migraciones/FondoLluviaEscaneoRojo.jsx';
 import InicioMigraciones from './modulos/migraciones/InicioMigraciones.jsx';
 import RegistroCita from './modulos/migraciones/RegistroCita.jsx';
 import ConsultaCita from './modulos/migraciones/ConsultaCita.jsx';
@@ -12,11 +13,13 @@ import PanelAdmin from './modulos/migraciones/PanelAdmin.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import './styles/design-system.css';
+import './styles/visual-theme.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ModuleAuthBridge>
       <HashRouter>
+        <FondoLluviaEscaneoRojo />
         <ModuleNavigation />
         <Routes>
           <Route path="/migraciones" element={<InicioMigraciones />} />
@@ -31,7 +34,7 @@ createRoot(document.getElementById('root')).render(
           <Route
             path="/migraciones/consulta"
             element={
-              <RutaProtegida modulo="migraciones" roles={['cliente']}>
+              <RutaProtegida modulo="migraciones" roles={['cliente', 'administrador', 'empleado']}>
                 <ConsultaCita />
               </RutaProtegida>
             }

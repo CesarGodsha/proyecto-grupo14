@@ -1,6 +1,7 @@
 import './migraciones.css';
 import { Link } from 'react-router-dom';
 import useApiResource from '../../hooks/useApiResource.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 import MigPageHeader from './MigPageHeader.jsx';
 
 function badgeEstado(estado) {
@@ -15,9 +16,14 @@ function badgeEstado(estado) {
 }
 
 export default function ConsultaCita() {
-  const { data: citas, cargando, error } = useApiResource(
-    '/migraciones/citas/mias'
-  );
+  const { rolDe } = useAuth();
+  const rol = rolDe('migraciones');
+  const esPersonal = rol === 'administrador' || rol === 'empleado';
+  const esCliente = rol === 'cliente';
+  const endpoint = esPersonal
+    ? '/migraciones/citas'
+    : '/migraciones/citas/mias';
+  const { data: citas, cargando, error } = useApiResource(endpoint);
   const cantidad = `${citas.length} ${
     citas.length === 1 ? 'solicitud' : 'solicitudes'
   }`;
@@ -26,9 +32,13 @@ export default function ConsultaCita() {
     <div className="mig mig-modulo-wrapper">
       <main className="mig-page-container">
         <MigPageHeader
-          title="Mis citas"
-          description="Consulta el estado de tus registros y actualiza los que aún estén pendientes."
-          metaLabel="Registros en tu cuenta"
+          title={esPersonal ? 'Consultar citas del módulo' : 'Mis citas'}
+          description={
+            esPersonal
+              ? 'Consulta las solicitudes recibidas y accede a la bandeja para atenderlas.'
+              : 'Consulta el estado de tus registros y actualiza los que aún estén pendientes.'
+          }
+          metaLabel={esPersonal ? 'Registros del módulo' : 'Registros en tu cuenta'}
           metaValue={cantidad}
         />
 
@@ -36,16 +46,23 @@ export default function ConsultaCita() {
           <div className="mig-card-heading">
             <div>
               <span className="mig-home-eyebrow">SEGUIMIENTO</span>
-              <h2>Tus citas registradas</h2>
+              <h2>{esPersonal ? 'Solicitudes migratorias' : 'Tus citas registradas'}</h2>
             </div>
-            <Link className="mig-btn-submit mig-btn-link" to="/migraciones/registro">
-              Nueva solicitud <span aria-hidden="true">+</span>
-            </Link>
+            {esCliente && (
+              <Link className="mig-btn-submit mig-btn-link" to="/migraciones/registro">
+                Nueva solicitud <span aria-hidden="true">+</span>
+              </Link>
+            )}
+            {esPersonal && (
+              <Link className="mig-btn-submit mig-btn-link" to="/migraciones/panel">
+                Abrir bandeja <span aria-hidden="true">→</span>
+              </Link>
+            )}
           </div>
 
           {cargando && (
             <p className="mig-inline-state" role="status">
-              Cargando tus solicitudes…
+              {esPersonal ? 'Cargando solicitudes del módulo…' : 'Cargando tus solicitudes…'}
             </p>
           )}
 
@@ -55,7 +72,7 @@ export default function ConsultaCita() {
             </div>
           )}
 
-          {!cargando && !error && citas.length === 0 && (
+          {!cargando && !error && esCliente && citas.length === 0 && (
             <div className="mig-empty-state">
               <strong>Aún no tienes solicitudes registradas</strong>
               <p>
@@ -66,17 +83,25 @@ export default function ConsultaCita() {
             </div>
           )}
 
+          {!cargando && !error && esPersonal && citas.length === 0 && (
+            <div className="mig-empty-state">
+              <strong>No hay solicitudes para consultar</strong>
+              <p>Las solicitudes recibidas aparecerán aquí.</p>
+            </div>
+          )}
+
           {!cargando && !error && citas.length > 0 && (
             <div className="mig-table-wrap">
               <table className="mig-table">
                 <thead>
                   <tr>
                     <th>Código</th>
+                    {esPersonal && <th>Ciudadano</th>}
                     <th>Trámite</th>
                     <th>Fecha preferida</th>
                     <th>Hora</th>
                     <th>Estado</th>
-                    <th>Acción</th>
+                    {esCliente && <th>Acción</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -93,22 +118,25 @@ export default function ConsultaCita() {
                     return (
                       <tr key={idCita || codigo}>
                         <td className="mig-table-code">{codigo}</td>
+                        {esPersonal && <td>{cita.ciudadano || cita.nombre || '—'}</td>}
                         <td>{cita.tramite}</td>
                         <td>{String(cita.fecha || '').slice(0, 10)}</td>
                         <td>{String(cita.hora || '').slice(0, 5)}</td>
                         <td>{badgeEstado(cita.estado)}</td>
-                        <td>
-                          {sePuedeEditar && idCita ? (
-                            <Link
-                              className="mig-table-action"
-                              to={`/migraciones/actualizar/${idCita}`}
-                            >
-                              Cambiar
-                            </Link>
-                          ) : (
-                            <span className="mig-table-muted">—</span>
-                          )}
-                        </td>
+                        {esCliente && (
+                          <td>
+                            {sePuedeEditar && idCita ? (
+                              <Link
+                                className="mig-table-action"
+                                to={`/migraciones/actualizar/${idCita}`}
+                              >
+                                Cambiar
+                              </Link>
+                            ) : (
+                              <span className="mig-table-muted">—</span>
+                            )}
+                          </td>
+                        )}
                       </tr>
                     );
                   })}
