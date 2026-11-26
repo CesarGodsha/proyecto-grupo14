@@ -25,6 +25,7 @@ function request(server, path, headers = {}, method = 'GET') {
           resolve({
             status: res.statusCode,
             body: JSON.parse(Buffer.concat(chunks).toString()),
+            headers: res.headers,
           });
         });
       }
@@ -50,9 +51,14 @@ for (const [service, serviceApp] of [
         })
     );
 
-    const health = await request(server, '/api/salud');
+    const health = await request(server, '/api/salud', {
+      Origin: 'https://vercel-preview.example',
+    });
     assert.equal(health.status, 200);
     assert.deepEqual(health.body, { ok: true, servicio: service });
+    if (service !== 'auth') {
+      assert.equal(health.headers['access-control-allow-origin'], '*');
+    }
   });
 }
 

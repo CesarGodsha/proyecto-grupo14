@@ -10,10 +10,7 @@ export default async function startServer(app, service, defaultPort) {
     }
 
     await pool.query('SELECT 1');
-    const port =
-      process.env.NODE_ENV === 'production'
-        ? Number(process.env.PORT) || defaultPort
-        : defaultPort;
+    const port = Number(process.env.PORT) || defaultPort;
     app.listen(port, () => {
       console.log(`${service} API lista en http://localhost:${port}/api`);
     });
