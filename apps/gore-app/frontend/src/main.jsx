@@ -3,9 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ModuleAuthBridge from './components/ModuleAuthBridge.jsx';
 import GoreLayout from './components/GoreLayout.jsx';
+import RutaProtegida from './components/RutaProtegida.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 import FondoRedNeuronalAzul from './modulos/gore/FondoRedNeuronalAzul.jsx';
 import InicioGore from './modulos/gore/InicioGore.jsx';
+import ControlTurnos from './modulos/gore/ControlTurnos.jsx';
 import {
   ConsultaGorePage,
   PanelGorePage,
@@ -32,6 +34,14 @@ createRoot(document.getElementById('root')).render(
             <Route index element={<InicioGore />} />
             <Route path="registro" element={<RegistroGorePage />} />
             <Route path="consulta" element={<ConsultaGorePage />} />
+            <Route
+              path="turnos"
+              element={
+                <RutaProtegida modulo="gore" roles={['administrador']}>
+                  <ControlTurnos />
+                </RutaProtegida>
+              }
+            />
             <Route
               path="panel"
               element={

@@ -3,7 +3,8 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 export default function ModuleNavigation() {
   const { rolDe } = useAuth();
-  const esPersonal = ['administrador', 'empleado'].includes(rolDe('gore'));
+  const rol = rolDe('gore');
+  const esPersonal = ['administrador', 'empleado'].includes(rol);
 
   return (
     <nav
@@ -26,6 +27,7 @@ export default function ModuleNavigation() {
           {esPersonal ? 'Consultar expedientes' : 'Mis expedientes'}
         </NavLink>
         {esPersonal && <NavLink to="/gore/panel">Bandeja de atención</NavLink>}
+        {rol === 'administrador' && <NavLink to="/gore/turnos">Control turnos</NavLink>}
       </div>
     </nav>
   );

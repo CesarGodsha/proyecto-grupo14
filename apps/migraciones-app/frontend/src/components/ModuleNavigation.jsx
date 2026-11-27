@@ -29,6 +29,9 @@ export default function ModuleNavigation() {
         {esPersonal && (
           <NavLink to="/migraciones/panel">Bandeja Fronteriza</NavLink>
         )}
+        {rol === 'administrador' && (
+          <NavLink to="/migraciones/turnos">Control turnos</NavLink>
+        )}
       </div>
     </nav>
   );

@@ -10,6 +10,7 @@ import RegistroCita from './modulos/migraciones/RegistroCita.jsx';
 import ConsultaCita from './modulos/migraciones/ConsultaCita.jsx';
 import ActualizarCita from './modulos/migraciones/ActualizarCita.jsx';
 import PanelAdmin from './modulos/migraciones/PanelAdmin.jsx';
+import ControlTurnos from './modulos/migraciones/ControlTurnos.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import './styles/design-system.css';
@@ -52,6 +53,14 @@ createRoot(document.getElementById('root')).render(
             element={
               <RutaProtegida modulo="migraciones" roles={['administrador', 'empleado']}>
                 <PanelAdmin />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/migraciones/turnos"
+            element={
+              <RutaProtegida modulo="migraciones" roles={['administrador']}>
+                <ControlTurnos />
               </RutaProtegida>
             }
           />

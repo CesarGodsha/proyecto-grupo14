@@ -8,6 +8,7 @@ import ConsultaCarga from './modulos/logistica/ConsultaCarga.jsx';
 import RegistroCarga from './modulos/logistica/RegistroCarga.jsx';
 import ActualizarCarga from './modulos/logistica/ActualizarCarga.jsx';
 import PanelLogistica from './modulos/logistica/PanelLogistica.jsx';
+import ControlTurnos from './modulos/logistica/ControlTurnos.jsx';
 import Inicio from './modulos/logistica/Inicio.jsx';
 import FondoRutasGpsLogistica from './modulos/logistica/FondoRutasGpsLogistica.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -52,6 +53,14 @@ createRoot(document.getElementById('root')).render(
             element={
               <RutaProtegida modulo="logistica" roles={['administrador', 'empleado']}>
                 <PanelLogistica />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/logistica/turnos"
+            element={
+              <RutaProtegida modulo="logistica" roles={['administrador']}>
+                <ControlTurnos />
               </RutaProtegida>
             }
           />

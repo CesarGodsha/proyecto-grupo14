@@ -4,14 +4,19 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const frontendRoot = path.dirname(fileURLToPath(import.meta.url));
+const repositoryRoot = path.resolve(frontendRoot, '../../..');
 
 export default defineConfig({
   root: frontendRoot,
   envDir: frontendRoot,
+  resolve: {
+    alias: { react: path.join(frontendRoot, 'node_modules/react') },
+  },
   plugins: [react()],
   server: {
     port: 5175,
     strictPort: true,
+    fs: { allow: [repositoryRoot] },
     proxy: {
       '/api': {
         target: 'http://localhost:3002',

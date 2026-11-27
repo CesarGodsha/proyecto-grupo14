@@ -27,6 +27,9 @@ export default function ModuleNavigation() {
         {esPersonal && (
           <NavLink to="/logistica/panel">Panel Operativo</NavLink>
         )}
+        {rol === 'administrador' && (
+          <NavLink to="/logistica/turnos">Control turnos</NavLink>
+        )}
       </div>
     </nav>
   );

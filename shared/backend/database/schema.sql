@@ -48,6 +48,18 @@ CREATE TABLE IF NOT EXISTS usuario_rol (
   PRIMARY KEY (id_usuario, modulo)
 );
 
+CREATE TABLE IF NOT EXISTS turnos_empleado (
+  id_usuario INT NOT NULL,
+  modulo VARCHAR(30) NOT NULL,
+  hora_inicio TIME NOT NULL,
+  hora_fin TIME NOT NULL,
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (id_usuario, modulo),
+  FOREIGN KEY (id_usuario, modulo)
+    REFERENCES usuario_rol (id_usuario, modulo) ON DELETE CASCADE,
+  CHECK (hora_inicio <> hora_fin)
+);
+
 -- 2. Tabla de GORE Junín (Fernando Alex Ccencho Gamarra)
 CREATE TABLE IF NOT EXISTS tramites_mesa_partes (
   id SERIAL PRIMARY KEY,

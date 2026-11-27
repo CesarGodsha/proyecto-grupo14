@@ -147,6 +147,19 @@ test('expone salud y exige token para rutas privadas', async (t) => {
   );
   const adminHeaders = { Authorization: `Bearer ${adminToken}` };
 
+  for (const [modulo, requestHeaders] of [
+    ['gore', { Authorization: `Bearer ${empleadoGoreToken}` }],
+    ['logistica', employeeHeaders],
+    ['migraciones', employeeHeaders],
+  ]) {
+    const response = await request(
+      server,
+      `/api/${modulo}/turnos`,
+      requestHeaders
+    );
+    assert.equal(response.status, 403, `solo el administrador de ${modulo} gestiona turnos`);
+  }
+
   for (const [path, method, requestHeaders] of [
     ['/api/migraciones/citas/mias', 'GET', employeeHeaders],
     ['/api/migraciones/citas', 'POST', adminHeaders],
